@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whatfix Guidance Dashboard Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+  </style>
+</head>
+<body class="bg-[#f6f7fa] font-sans antialiased text-[#1F1F32] overflow-hidden select-none">
+
+  <!-- FULL MAIN DASHBOARD VIEW (VIEW 1) -->
+  <div class="flex h-screen w-full overflow-hidden">
+    
+    <!-- LEFT SIDEBAR -->
+    <div class="w-[260px] bg-[#1a1a2e] text-white flex flex-col shrink-0 relative border-r border-white/5 shadow-xl">
+      <!-- Collapse Trigger Arrow -->
+      <button class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#1a1a2e] border border-white/10 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 z-10 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 6 9 12 15 18"></polyline></svg>
+      </button>
+
+      <!-- Sidebar Branding Header -->
+      <div class="flex items-center justify-between px-4 py-4 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="16.9705" height="5.65685" transform="matrix(-0.707107 0.707107 0.707107 0.707107 19.9999 8.00003)" fill="#F55800"></rect>
+            <rect width="16.9705" height="5.65685" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 23.9999 12)" fill="#F55800"></rect>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 12L20 16L23.9999 12L19.9999 8.00003L16 12Z" fill="#C63D22"></path>
+            <rect x="3.99994" y="8" width="16.9705" height="5.65685" transform="rotate(45 3.99994 8)" fill="#FBA450"></rect>
+            <rect x="-6.10352e-05" y="12" width="16.9705" height="5.65685" transform="rotate(-45 -6.10352e-05 12)" fill="#FBA450"></rect>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.99994 7.99998L7.99993 12L3.99994 16L-5.6489e-05 12L3.99994 7.99998Z" fill="#FA8A1F"></path>
+          </svg>
+          <span class="font-semibold text-sm tracking-wide text-white">Guidance</span>
+        </div>
+        <button class="text-white/60 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="19" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle></svg></button>
+      </div>
+
+      <div class="h-px bg-white/10 mx-4 mb-2"></div>
+
+      <!-- Org / Demo Switcher -->
+      <div class="px-2 mb-3">
+        <div class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-[13px] font-medium text-white/90">
+          <div class="flex items-center gap-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.84079 13.7059C5.79926 13.4177 5.77778 13.1231 5.77778 12.8235C5.77778 10.3597 7.23116 8.23273 9.33333 7.24144M8.79326 18.1176C9.72974 18.6778 10.827 19 12 19C13.173 19 14.2703 18.6778 15.2067 18.1176M18.1592 13.7059C18.2007 13.4177 18.2222 13.1231 18.2222 12.8235C18.2222 10.3597 16.7688 8.23273 14.6667 7.24144M14.6667 6.64706C14.6667 8.10899 13.4728 9.29412 12 9.29412C10.5272 9.29412 9.33333 8.10899 9.33333 6.64706C9.33333 5.18513 10.5272 4 12 4C13.4728 4 14.6667 5.18513 14.6667 6.64706ZM9.33333 16.3529C9.33333 17.8149 8.13943 19 6.66667 19C5.19391 19 4 17.8149 4 16.3529C4 14.891 5.19391 13.7059 6.66667 13.7059C8.13943 13.7059 9.33333 14.891 9.33333 16.3529ZM20 16.3529C20 17.8149 18.8061 19 17.3333 19C15.8606 19 14.6667 17.8149 14.6667 16.3529C14.6667 14.891 15.8606 13.7059 17.3333 13.7059C18.8061 13.7059 20 14.891 20 16.3529Z"></path></svg>
+            <span>Aravind_Demo</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="8 9 12 5 16 9"></polyline><polyline points="16 15 12 19 8 15"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="flex-1 overflow-y-auto px-2 space-y-0.5 custom-scrollbar">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-medium text-[13px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
+          <span>Content</span>
+        </a>
+      </nav>
+
+      <div class="p-2 border-t border-white/10 shrink-0 text-xs text-white/60">
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
+          <div class="w-6 h-6 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-[11px]">AM</div>
+          <span class="text-white font-medium">Aravind Manohar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0 bg-white">
+      <!-- Dashboard Header toolbar -->
+      <header class="h-[56px] border-b border-[#eef1f6] flex items-center justify-between px-6 shrink-0 bg-white">
+        <div class="flex items-center gap-4">
+          <h1 class="text-lg font-bold text-[#1F1F32]">Content</h1>
+          <div class="flex gap-4 h-full pt-1">
+            <button class="border-b-2 border-[#0975d7] text-[#0975d7] px-1 font-semibold text-[13px] h-full">Draft</button>
+            <button class="text-[#6B697B] px-1 font-medium text-[13px] h-full">Ready</button>
+            <button class="text-[#6B697B] px-1 font-medium text-[13px] h-full">Production</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1.5 border border-gray-200 rounded-md text-xs font-medium text-gray-600">Create folder</button>
+          <button class="px-4 py-2 bg-[#d45f00] text-white text-xs font-semibold rounded-md">Create Content ▾</button>
+        </div>
+      </header>
+
+      <!-- Sub-toolbar filters -->
+      <div class="px-6 py-2.5 bg-[#f6f7fa] border-b border-gray-200 flex items-center justify-between text-xs text-gray-500 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="bg-white border border-gray-300 rounded-md px-2 py-1.5 flex items-center gap-2 w-64">
+            <span>🔍</span>
+            <input type="text" placeholder="Search content" class="outline-none w-full bg-transparent text-xs text-[#1F1F32]">
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button>Export Ready Package</button>
+          <button class="text-[#d45f00] font-semibold">Push to production</button>
+        </div>
+      </div>
+
+      <!-- AG-GRID TABLE SYSTEM -->
+      <div class="flex-1 overflow-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 font-semibold text-xs sticky top-0 z-10">
+              <th class="p-3 pl-6 w-12"><input type="checkbox"></th>
+              <th class="p-3 font-medium text-gray-600">Name</th>
+              <th class="p-3 font-medium text-gray-600">Last updated on</th>
+              <th class="p-3 font-medium text-gray-600">Type</th>
+              <th class="p-3 font-medium text-gray-600">Version</th>
+              <th class="p-3 font-medium text-gray-600">Last updated by</th>
+            </tr>
+          </thead>
+          <tbody class="text-[13px] text-gray-700 divide-y divide-gray-100">
+            <!-- Row 1: Folder -->
+            <tr class="hover:bg-gray-50/80 transition-colors">
+              <td class="p-3 pl-6"><input type="checkbox"></td>
+              <td class="p-3 font-medium text-[#1F1F32] flex items-center gap-2">
+                <span class="text-amber-500 text-lg">📁</span><span>Test 2</span>
+              </td>
+              <td class="p-3 text-gray-500">Mar 03, 2026</td>
+              <td class="p-3"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">Folder</span></td>
+              <td class="p-3 text-gray-400">—</td>
+              <td class="p-3 text-gray-500">Aravind Manohar</td>
+            </tr>
+
+            <!-- Row 2: THE INTERACTIVE TARGET FLOW -->
+            <tr class="hover:bg-orange-50/40 bg-white transition-all group border-l-2 border-transparent hover:border-[#d45f00]">
+              <td class="p-3 pl-6"><input type="checkbox"></td>
+              <td class="p-3 font-medium text-[#0176d3] flex items-center justify-between min-w-[340px]">
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-400 text-base">🔀</span>
+                  <span class="text-[#1F1F32]">Test</span>
+                </div>
+                <!-- Row Action Buttons visible on row hover -->
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                  <button class="p-1 text-gray-400 hover:text-gray-700">▶</button>
+                  <!-- ROUTING LINK: Navigates to view 2 file -->
+                  <a href="dvm-prototype.html" class="p-1 text-[#d45f00] hover:bg-orange-100/50 rounded block" title="Edit flow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line></svg>
+                  </a>
+                  <button class="p-1 text-gray-400 hover:text-gray-700">⋮</button>
+                </div>
+              </td>
+              <td class="p-3 text-gray-500">Jun 08, 2026</td>
+              <td class="p-3"><span class="text-xs bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded font-medium border border-orange-100">Flow</span></td>
+              <td class="p-3 text-gray-600">1</td>
+              <td class="p-3 text-gray-500">Aravind Manohar</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination footer -->
+      <footer class="h-[44px] border-t border-gray-200 bg-white flex items-center justify-between px-6 text-xs text-gray-400 shrink-0">
+        <div>Rows 1-2 of 2</div>
+      </footer>
+    </div>
+  </div>
+
+</body>
+</html>
