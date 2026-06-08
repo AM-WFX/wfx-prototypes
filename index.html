@@ -6,20 +6,20 @@
   <title>Whatfix Guidance System Prototype</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Custom Scrollbar configurations matching product density */
+    /* Custom Scrollbar configurations */
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
     
-    /* Crosshair pointer cursor logic when structural element picker is active */
+    /* Crosshair pointer cursor logic for picker */
     body.picker-on .sandbox-app-area * { cursor: crosshair !important; }
   </style>
 </head>
 <body class="bg-[#f6f7fa] font-sans antialiased text-[#1F1F32] overflow-hidden select-none">
 
-  <div id="wfx-view-dashboard" class="flex h-screen w-full overflow-hidden transition-opacity duration-150">
+  <div id="wfx-hub-layout" class="flex h-screen w-full overflow-hidden transition-opacity duration-150">
     
-    <div class="w-[260px] bg-[#1a1a2e] text-white flex flex-col shrink-0 relative border-r border-white/5 shadow-xl">
-      <button class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#1a1a2e] border border-white/10 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 z-10 shadow-md">
+    <div class="w-[260px] bg-[#1a1a2e] text-white flex flex-col shrink-0 relative border-r border-white/5 shadow-xl z-20">
+      <button class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#1a1a2e] border border-white/10 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 shadow-md">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 6 9 12 15 18"></polyline></svg>
       </button>
 
@@ -46,69 +46,163 @@
       </div>
 
       <nav class="flex-1 overflow-y-auto px-2 space-y-0.5 custom-scrollbar">
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-medium text-[13px]">
+        <a href="#" onclick="changeView('dashboard')" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-medium text-[13px]">
           <span>Content</span>
         </a>
       </nav>
     </div>
 
-    <div class="flex-1 flex flex-col min-w-0 bg-white">
-      <header class="h-[56px] border-b border-[#eef1f6] flex items-center justify-between px-6 shrink-0 bg-white">
-        <div class="flex items-center gap-4">
-          <h1 class="text-lg font-bold text-[#1F1F32]">Content</h1>
-          <div class="flex gap-4 h-full pt-1 text-[13px] font-medium border-b border-transparent">
-            <button class="border-b-2 border-[#0975d7] text-[#0975d7] h-full px-1">Draft</button>
-            <button class="text-gray-400">Ready</button>
-            <button class="text-gray-400">Production</button>
+    <div class="flex-1 relative bg-white">
+      
+      <div id="wfx-view-dashboard" class="absolute inset-0 flex flex-col min-w-0 bg-white z-10 transition-opacity duration-150">
+        <header class="h-[56px] border-b border-[#eef1f6] flex items-center justify-between px-6 shrink-0 bg-white">
+          <div class="flex items-center gap-4">
+            <h1 class="text-lg font-bold text-[#1F1F32]">Content</h1>
+            <div class="flex gap-4 h-full pt-1 text-[13px] font-medium border-b border-transparent">
+              <button class="border-b-2 border-[#0975d7] text-[#0975d7] h-full px-1">Draft</button>
+              <button class="text-gray-400">Ready</button>
+              <button class="text-gray-400">Production</button>
+            </div>
+          </div>
+          <button class="px-4 py-2 bg-[#d45f00] text-white text-xs font-semibold rounded-md hover:bg-[#b85200]">Create Content ▾</button>
+        </header>
+
+        <div class="px-6 py-2.5 bg-[#f6f7fa] border-b border-gray-200 flex items-center justify-between text-xs text-gray-500 shrink-0">
+          <div class="bg-white border border-gray-300 rounded-md px-2 py-1.5 flex items-center gap-2 w-64">
+            <span>🔍</span><input type="text" placeholder="Search content" class="outline-none bg-transparent w-full">
           </div>
         </div>
-        <button class="px-4 py-2 bg-[#d45f00] text-white text-xs font-semibold rounded-md hover:bg-[#b85200]">Create Content ▾</button>
-      </header>
 
-      <div class="px-6 py-2.5 bg-[#f6f7fa] border-b border-gray-200 flex items-center justify-between text-xs text-gray-500 shrink-0">
-        <div class="bg-white border border-gray-300 rounded-md px-2 py-1.5 flex items-center gap-2 w-64">
-          <span>🔍</span><input type="text" placeholder="Search content" class="outline-none bg-transparent w-full">
+        <div class="flex-1 overflow-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 font-semibold text-xs sticky top-0 z-10">
+                <th class="p-3 pl-6 w-12"><input type="checkbox"></th>
+                <th class="p-3">Name</th>
+                <th class="p-3">Last updated on</th>
+                <th class="p-3">Type</th>
+                <th class="p-3">Version</th>
+                <th class="p-3">Last updated by</th>
+              </tr>
+            </thead>
+            <tbody class="text-[13px] text-gray-700 divide-y divide-gray-100">
+              <tr class="hover:bg-orange-50/30 group">
+                <td class="p-3 pl-6"><input type="checkbox"></td>
+                <td class="p-3 font-medium flex items-center justify-between min-w-[340px]">
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-400">🔀</span><span class="text-[#1f1f32] font-semibold">Test</span>
+                  </div>
+                  <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                    <button onclick="changeView('dvm')" class="p-1 text-[#d45f00] hover:bg-orange-100/50 rounded block" title="Edit Content Details">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line></svg>
+                    </button>
+                  </div>
+                </td>
+                <td class="p-3 text-gray-500">Jun 08, 2026</td>
+                <td class="p-3"><span class="text-xs bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded font-medium border border-orange-100">Flow</span></td>
+                <td class="p-3 text-gray-600 font-mono">1</td>
+                <td class="p-3 text-gray-500">Aravind Manohar</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div class="flex-1 overflow-auto custom-scrollbar">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 font-semibold text-xs sticky top-0 z-10">
-              <th class="p-3 pl-6 w-12"><input type="checkbox"></th>
-              <th class="p-3">Name</th>
-              <th class="p-3">Last updated on</th>
-              <th class="p-3">Type</th>
-              <th class="p-3">Version</th>
-              <th class="p-3">Last updated by</th>
-            </tr>
-          </thead>
-          <tbody class="text-[13px] text-gray-700 divide-y divide-gray-100">
-            <tr class="hover:bg-orange-50/30 group">
-              <td class="p-3 pl-6"><input type="checkbox"></td>
-              <td class="p-3 font-medium flex items-center justify-between min-w-[340px]">
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-400">🔀</span><span class="text-[#1f1f32] font-semibold">Test</span>
+      <div id="wfx-view-dvm" class="absolute inset-0 flex flex-col min-w-0 bg-[#f6f6f9] hidden z-10 transition-opacity duration-150">
+        <div class="bg-white shrink-0">
+          <div class="px-6 pt-4 pb-1">
+            <div class="flex items-center gap-2 text-[13px] mb-2">
+              <button onclick="changeView('dashboard')" class="text-gray-500 hover:text-gray-800 font-medium">All Content</button>
+              <span class="text-gray-400">/</span>
+              <span class="text-gray-800 font-medium">Reselection</span>
+              <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded-full text-[11px] font-semibold tracking-wide">Editing</span>
+            </div>
+            
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <span class="text-gray-400">🔀</span>
+                <h2 class="text-xl font-bold text-gray-800">Reselection</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold flex items-center gap-1 hover:bg-gray-50">
+                  ✨ Enhance ▾
+                </button>
+                <button class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold hover:bg-gray-50">
+                  Preview ▾
+                </button>
+                <button onclick="changeView('salesforce-studio')" class="px-4 py-1.5 bg-white border border-gray-300 text-gray-700 text-xs font-semibold rounded-md hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-1.5">
+                  Launch live edit 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"></path><line x1="10" y1="14" x2="20" y2="4"></line><polyline points="15 4 20 4 20 9"></polyline></svg>
+                </button>
+                <button class="px-2 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold hover:bg-gray-50">⋮</button>
+              </div>
+            </div>
+
+            <div class="flex gap-6 h-full pt-1 text-[13px] font-medium border-b border-gray-200">
+              <button class="border-b-2 border-[#d45f00] text-[#d45f00] h-full pb-2 font-semibold">Steps</button>
+              <button class="text-gray-500 pb-2">Details</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-6">
+          <div class="max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-gray-800 text-sm">1 Step</h3>
+              <div class="flex gap-1 bg-white border border-gray-200 rounded p-0.5">
+                <button class="p-1 text-blue-600 bg-blue-50 rounded"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
+                <button class="p-1 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg></button>
+              </div>
+            </div>
+
+            <div class="flex gap-4 flex-wrap">
+              <div class="w-[320px] bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden">
+                <div class="p-3 border-b border-gray-100 flex items-center gap-2 cursor-grab">
+                  <span class="text-gray-300">⋮⋮</span>
+                  <span class="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">1</span>
+                  <span class="font-bold text-gray-800 text-[13px]">Click here</span>
                 </div>
-                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
-                  <button onclick="changeView('salesforce-studio')" class="p-1 text-[#d45f00] hover:bg-orange-100/50 rounded block" title="Launch Interactive Edit Sandbox">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line></svg>
-                  </button>
+                <div class="h-[180px] bg-gray-50 border-b border-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
+                  <div class="w-full h-full bg-white border border-gray-200 shadow-sm rounded relative">
+                    <div class="absolute top-10 left-10 w-24 h-10 border-2 border-blue-500 bg-blue-500/10"></div>
+                    <div class="absolute top-24 left-8 bg-[#1f1f32] text-white text-[10px] p-2 rounded shadow flex flex-col gap-1 w-32">
+                      <span class="font-bold border-b border-white/20 pb-1">Step 1</span>
+                      <span>Click here</span>
+                    </div>
+                  </div>
                 </div>
-              </td>
-              <td class="p-3 text-gray-500">Jun 08, 2026</td>
-              <td class="p-3"><span class="text-xs bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded font-medium border border-orange-100">Flow</span></td>
-              <td class="p-3 text-gray-600 font-mono">1</td>
-              <td class="p-3 text-gray-500">Aravind Manohar</td>
-            </tr>
-          </tbody>
-        </table>
+                <div class="p-3 flex items-center justify-between bg-white text-xs">
+                  <span class="text-gray-500">On click of selected element</span>
+                  <div class="flex gap-2">
+                    <button class="text-gray-400 hover:text-gray-600">⑂</button>
+                    <button class="text-gray-400 hover:text-gray-600">⋮</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-[320px] bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col p-4 justify-center gap-2 cursor-pointer hover:border-gray-300 transition-colors">
+                <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mb-1">🏁</div>
+                <h4 class="font-bold text-gray-800 text-[13px]">End Message</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-[60px] bg-white border-t border-gray-200 px-6 flex items-center justify-between shrink-0">
+          <button onclick="changeView('dashboard')" class="text-gray-500 hover:text-gray-800 text-xs font-semibold flex items-center gap-1">
+            ← Back to view mode
+          </button>
+          <div class="flex items-center gap-2">
+            <button disabled class="px-4 py-2 border border-gray-200 text-gray-400 text-xs font-semibold rounded-md cursor-not-allowed">Discard</button>
+            <button disabled class="px-4 py-2 bg-[#d45f00]/50 text-white text-xs font-semibold rounded-md cursor-not-allowed">Save</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 
-  <div id="wfx-view-salesforce-studio" class="hidden h-screen w-full relative overflow-hidden transition-opacity duration-150">
+  <div id="wfx-view-salesforce-studio" class="hidden h-screen w-full relative overflow-hidden transition-opacity duration-150 z-50">
     
     <div class="sandbox-app-area absolute inset-0 z-0 overflow-hidden bg-[#eef1f6] flex flex-col text-[13px]">
       <div class="bg-[#032d60] text-white px-3 flex items-center gap-3 h-[48px] shrink-0">
@@ -156,12 +250,11 @@
       </div>
     </div>
 
-
     <div id="studio-overlay-wrapper" class="absolute top-0 right-0 h-full flex z-[9999] shadow-[-16px_0_35px_rgba(0,0,0,0.12)] bg-transparent select-none font-['Inter',_Arial,_sans-serif] transition-transform duration-300">
       
       <div class="w-[48px] h-full bg-[#1f1f32] flex flex-col items-center py-3 justify-between shrink-0 border-r border-white/5">
         <div class="flex flex-col items-center gap-1.5 w-full">
-          <button onclick="changeView('dashboard')" class="w-[40px] h-[40px] flex items-center justify-center rounded bg-white/10 text-white hover:bg-white/15 transition-all" title="Exit to Hub Management Center">
+          <button onclick="changeView('dvm')" class="w-[40px] h-[40px] flex items-center justify-center rounded bg-white/10 text-white hover:bg-white/15 transition-all" title="Exit to Hub Management Center">
             <span class="text-base">🔥</span>
           </button>
           <button class="w-[40px] h-[40px] flex items-center justify-center rounded text-white/40 hover:text-white transition-all"><span class="text-base">▤</span></button>
@@ -172,23 +265,20 @@
       </div>
 
       <div class="w-[380px] min-w-[380px] bg-white border-l border-[#dfdde7] flex flex-col h-full shrink-0">
-        
         <header class="h-[52px] px-4 border-b border-[#f2f2f8] flex items-center justify-between shrink-0 bg-white">
           <div class="flex items-center gap-2 text-[14px] font-bold text-[#1f1f32]">
             <button id="studio-nav-back-arrow" onclick="reverseToStudioHome()" class="text-gray-400 hover:text-gray-800 font-bold pr-1 hidden">←</button>
             <span id="studio-panel-header-title">Whatfix Studio</span>
           </div>
-          <button onclick="changeView('dashboard')" class="w-6 h-6 flex items-center justify-center text-[#8c899f] hover:text-[#1f1f32] text-xs">✕</button>
+          <button onclick="changeView('dvm')" class="w-6 h-6 flex items-center justify-center text-[#8c899f] hover:text-[#1f1f32] text-xs">✕</button>
         </header>
 
         <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col bg-white">
-          
           <div id="studio-panel-home" class="p-4 space-y-5 flex flex-col">
             
             <div class="space-y-2">
               <h4 class="text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Content</h4>
               <div class="grid grid-cols-3 gap-2 justify-items-center">
-                
                 <div onclick="drillIntoStepEditor('Flow', '🌊')" class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
                   <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
                     <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🌊</span></div>
@@ -197,7 +287,6 @@
                     <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Flow</span>
                   </div>
                 </div>
-
                 <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
                   <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
                     <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🔗</span></div>
@@ -206,122 +295,8 @@
                     <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Link</span>
                   </div>
                 </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🎥</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Video</span>
-                  </div>
                 </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">📄</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Article</span>
-                  </div>
-                </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">📍</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Beacon</span>
-                  </div>
-                </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">💡</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Smart-tip</span>
-                  </div>
-                </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🚀</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Launcher</span>
-                  </div>
-                </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">⛔</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Blocker</span>
-                  </div>
-                </div>
-
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">💬</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Cues</span>
-                  </div>
-                </div>
-              </div>
             </div>
-
-            <div class="space-y-2">
-              <h4 class="text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Widgets</h4>
-              <div class="grid grid-cols-3 gap-2 justify-items-center">
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🪟</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Pop-up</span>
-                  </div>
-                </div>
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">📊</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Survey</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-2">
-              <h4 class="text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Simulation</h4>
-              <div class="grid grid-cols-3 gap-2 justify-items-center">
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">🪞</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">Mirror</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-2">
-              <h4 class="text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Events</h4>
-              <div class="grid grid-cols-3 gap-2 justify-items-center">
-                <div class="w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 group hover:border-[#ea5834]">
-                  <div class="w-[97px] h-[58.75px] bg-[#fcfcfd] flex items-center justify-center group-hover:bg-[#fff4f0] transition-colors shrink-0">
-                    <div class="w-[48px] h-[48px] flex items-center justify-center"><span class="w-[24px] h-[24px] flex items-center justify-center text-lg">⚡</span></div>
-                  </div>
-                  <div class="w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] leading-tight truncate w-full">User Action</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
 
           <div id="studio-panel-editor" class="hidden flex-col flex-1 divide-y divide-gray-100">
@@ -348,7 +323,6 @@
               <textarea rows="3" class="w-full border border-gray-200 rounded-lg p-2.5 text-xs outline-none focus:border-[#ea5834] resize-none">Click directly on this target component bounding area box container to configure operational baseline pipeline records maps.</textarea>
             </div>
           </div>
-
         </div>
 
         <div id="studio-panel-footer" class="p-3 border-t border-gray-100 bg-gray-50/50 hidden items-center justify-end">
@@ -359,23 +333,34 @@
 
       </div>
     </div>
-
   </div>
 
   <script>
-    // 1. Navigation Shell Master Toggle Views Routing Engine
+    // ROUTING ENGINE (Handles 3 Views: Dashboard -> DVM -> Studio)
     function changeView(targetStageId) {
-      if (targetStageId === 'salesforce-studio') {
-        document.getElementById('wfx-view-dashboard').classList.add('hidden');
-        document.getElementById('wfx-view-salesforce-studio').classList.remove('hidden');
-        reverseToStudioHome(); // Ensure reset to panel lists view initially
-      } else {
-        document.getElementById('wfx-view-dashboard').classList.remove('hidden');
-        document.getElementById('wfx-view-salesforce-studio').classList.add('hidden');
+      const hubLayout = document.getElementById('wfx-hub-layout');
+      const dashboardView = document.getElementById('wfx-view-dashboard');
+      const dvmView = document.getElementById('wfx-view-dvm');
+      const studioView = document.getElementById('wfx-view-salesforce-studio');
+
+      if (targetStageId === 'dashboard') {
+        hubLayout.classList.remove('hidden');
+        studioView.classList.add('hidden');
+        dashboardView.classList.remove('hidden');
+        dvmView.classList.add('hidden');
+      } else if (targetStageId === 'dvm') {
+        hubLayout.classList.remove('hidden');
+        studioView.classList.add('hidden');
+        dashboardView.classList.add('hidden');
+        dvmView.classList.remove('hidden');
+      } else if (targetStageId === 'salesforce-studio') {
+        hubLayout.classList.add('hidden');
+        studioView.classList.remove('hidden');
+        reverseToStudioHome();
       }
     }
 
-    // 2. Studio Panel View Drilldown Switches
+    // STUDIO SUB-PANEL CONTROLS
     function drillIntoStepEditor(tileTypeName, tileIconMark) {
       document.getElementById('studio-panel-home').classList.add('hidden');
       document.getElementById('studio-panel-editor').classList.remove('hidden');
@@ -398,7 +383,7 @@
       stopStudioPicker();
     }
 
-    // 3. Automated Element Selector Frame Tracking System Routine Pipelines
+    // STUDIO ELEMENT PICKER LOGIC
     let isElementPickerActive = false;
     const overlayTargetBoxBox = document.getElementById('wf-overlay');
     const hoverCoordinateTooltipBox = document.getElementById('wf-hover-tip');
@@ -409,7 +394,6 @@
       isElementPickerActive = true;
       document.body.classList.add('picker-on');
 
-      // Shift panel off-canvas frame coordinate dimensions out bounds, render floating action control banners
       overlayStudioSidebarWrapperBox.style.transform = 'translateX(332px)';
       bottomAlertControlTooltipBox.classList.remove('hidden');
 
@@ -434,7 +418,6 @@
       if (!isElementPickerActive) return;
       const focusedElementTargetNode = e.target;
 
-      // Restrict selections tracing overlap tracking variables inside active UI components frame boundaries
       if (overlayStudioSidebarWrapperBox.contains(focusedElementTargetNode) || bottomAlertControlTooltipBox.contains(focusedElementTargetNode)) {
         overlayTargetBoxBox.classList.add('hidden');
         hoverCoordinateTooltipBox.classList.add('hidden');
