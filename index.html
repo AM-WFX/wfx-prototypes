@@ -47,4 +47,393 @@
           <div class="py-3 px-3 border-b-2 border-[#0176d3] text-[#0176d3] font-medium -mb-[2px]">Activity</div>
           <div class="py-3 px-3 text-[#1F1F32] cursor-pointer hover:bg-gray-50">Chatter</div>
         </div>
-        <div class="p-3 border-b border
+        <div class="p-3 border-b border-[#f0f0f0] flex gap-2">
+          <button class="flex items-center gap-1.5 px-3 py-1.5 border border-[#ddd] rounded text-xs hover:bg-gray-50"><span class="w-4 h-4 bg-[#2e7d52] text-white rounded-[2px] flex items-center justify-center text-[9px]">✓</span> New Task</button>
+          <button class="flex items-center gap-1.5 px-3 py-1.5 border border-[#ddd] rounded text-xs hover:bg-gray-50"><span class="w-4 h-4 bg-[#b96fde] text-white rounded-[2px] flex items-center justify-center text-[9px]">📅</span> New Event</button>
+        </div>
+        <div class="flex-1 p-4 flex flex-col items-center justify-center text-center">
+          <p class="text-[#1F1F32] mb-1 font-medium">No activities to show.</p>
+          <p class="text-[#8C899F]">Get started by sending an email, scheduling a task, and more.</p>
+        </div>
+      </div>
+      <div class="w-[320px] shrink-0 flex flex-col gap-2 pr-[380px] pb-4"> <div class="bg-white rounded-lg p-3 border border-[#e0e0e0] flex items-center gap-2 shadow-sm">
+          <div class="w-7 h-7 bg-[#d45f00] rounded-full flex items-center justify-center text-white shrink-0">⚠</div>
+          <span>We found no potential duplicates of this Account.</span>
+        </div>
+        <div class="bg-white rounded-lg border border-[#e0e0e0] shadow-sm">
+          <div class="p-3 border-b border-[#f0f0f0] flex items-center gap-2 font-semibold cursor-pointer">
+            <span class="w-6 h-6 bg-[#d45f00] rounded flex items-center justify-center text-white">🛒</span>
+            <span>Quotes (1)</span>
+            <span class="ml-auto text-[#8C899F]">▾</span>
+          </div>
+          <div class="p-3 text-xs">
+            <div class="text-[#0176d3] font-medium mb-1 cursor-pointer hover:underline">Q-00255</div>
+            <div class="flex gap-2 text-[#8C899F] mb-1"><span class="w-20">Net Amount:</span><span class="text-[#1F1F32]">$0.00</span></div>
+            <div class="flex gap-2 text-[#8C899F]"><span class="w-20">Status:</span><span class="text-[#1F1F32]">Draft</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="wf-overlay" class="pointer-events-none fixed z-[9000] border-2 border-[#d45f00] bg-[#d45f00]/10 rounded-[3px] hidden"></div>
+  <div id="wf-hover-tip" class="pointer-events-none fixed z-[9001] bg-[#1F1F32]/95 text-white px-2.5 py-1.5 rounded-md text-[11px] font-mono hidden max-w-[260px]">
+    <span id="tip-tag" class="text-[#ff9966]"></span> <span id="tip-detail" class="text-[#7ecfed]"></span>
+  </div>
+
+  <div id="ms-tooltip" class="absolute bottom-4 right-[400px] bg-[#1F1F32] text-white rounded-xl p-3.5 z-[9050] min-w-[320px] shadow-2xl hidden text-[13px]">
+    <div class="flex items-center gap-3">
+      <span class="text-white/40 text-lg cursor-grab leading-none">⋮⋮</span>
+      <div class="flex-1">
+        <div class="font-semibold mb-0.5">Select an element to define</div>
+        <div class="text-xs text-white/65">Hover and click an element on the screen</div>
+      </div>
+      <button onclick="stopPicker()" class="bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 text-xs rounded-md font-medium transition-colors">Cancel</button>
+    </div>
+  </div>
+
+  <div id="studio-wrapper" class="absolute top-0 right-0 h-full flex z-50 shadow-[-12px_0_30px_rgba(0,0,0,0.15)] transition-transform duration-300">
+    
+    <div class="w-12 bg-[#1a1a2e] flex flex-col items-center py-2 gap-0.5 shrink-0 z-10 text-white text-base">
+      <button class="w-9 h-9 flex items-center justify-center rounded-md text-[#d45f00] hover:bg-white/10" title="Whatfix">🔥</button>
+      <button class="w-9 h-9 flex items-center justify-center rounded-md text-white/55 hover:bg-white/10 hover:text-white" title="Salesforce">☁</button>
+      <button onclick="switchView('studio')" class="w-9 h-9 flex items-center justify-center rounded-md bg-white/10 text-white" title="Home">🏠</button>
+      <button class="w-9 h-9 flex items-center justify-center rounded-md text-white/55 hover:bg-white/10 hover:text-white" title="Add">＋</button>
+      <button class="w-9 h-9 flex items-center justify-center rounded-md text-white/55 hover:bg-white/10 hover:text-white" title="Content">▤</button>
+      
+      <div class="w-[30px] h-px bg-white/10 my-1.5"></div>
+      
+      <div class="mt-auto flex flex-col gap-0.5">
+        <button class="w-9 h-9 flex items-center justify-center rounded-md text-white/55 hover:bg-white/10 hover:text-white">▦</button>
+        <button class="w-9 h-9 flex items-center justify-center rounded-md text-white/55 hover:bg-white/10 hover:text-white">W</button>
+      </div>
+    </div>
+
+    <div class="w-[380px] min-w-[380px] bg-white border-l border-[#e0e0e0] flex flex-col h-full z-10">
+      
+      <header class="p-3 px-4 border-b border-[#ebebeb] flex items-center justify-between shrink-0 bg-white">
+        <div class="flex items-center gap-2.5 text-[15px] font-semibold text-[#1F1F32]">
+          <button id="back-btn" onclick="goBack()" class="text-[#8C899F] text-lg hover:text-[#1F1F32] leading-none hidden">←</button>
+          <span id="sidebar-title">Studio</span>
+        </div>
+        <div class="flex gap-1 items-center">
+          <button class="w-[22px] h-[22px] flex items-center justify-center rounded text-[#8C899F] text-xs hover:bg-[#f0f0f0] hover:text-[#1F1F32]">⋮</button>
+          <button class="w-[22px] h-[22px] flex items-center justify-center rounded text-[#8C899F] text-xs hover:bg-[#f0f0f0] hover:text-[#1F1F32]">✕</button>
+        </div>
+      </header>
+      
+      <div class="flex-1 overflow-y-auto custom-scrollbar relative flex flex-col bg-white">
+        
+        <div id="view-studio" class="flex flex-col">
+          <div class="p-5 pb-[22px] relative overflow-hidden">
+            <div class="text-[17px] font-bold text-[#1F1F32] leading-snug max-w-[230px]">Studio: Guide. Track. Get feedback. In context. All in one place.</div>
+            <div class="absolute right-[14px] top-[14px] w-[96px] h-[90px]">
+              <svg viewBox="0 0 110 100" fill="none" class="w-full h-full">
+                <circle cx="80" cy="20" r="14" fill="#ffd97a"/>
+                <path d="M30 90 L60 30 L90 90 Z" fill="#d45f00"/>
+                <path d="M55 90 L80 50 L95 90 Z" fill="#5b6af5"/>
+                <circle cx="98" cy="70" r="6" fill="#ffd97a"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex justify-between items-center px-5 pb-3.5 border-b border-[#f0f0f0]">
+            <span class="text-[13px] font-semibold text-[#1F1F32]">Sharepoint_Demo</span>
+            <span class="text-[13px] text-[#0176d3] cursor-pointer flex items-center gap-1">Preview mode 👁</span>
+          </div>
+
+          <div class="px-5 pt-4 pb-1.5">
+            <div class="text-xs text-[#8C899F] font-medium mb-3 tracking-wide">Content</div>
+            <div class="grid grid-cols-3 gap-2.5">
+              <div class="border border-[#ebebeb] rounded-lg p-3.5 flex flex-col items-center gap-2 cursor-pointer hover:border-[#5b6af5] hover:bg-[#fafbff]">
+                <span class="text-lg">🌊</span><span class="text-xs font-medium">Flow</span>
+              </div>
+              <div class="border border-[#ebebeb] rounded-lg p-3.5 flex flex-col items-center gap-2 cursor-pointer hover:border-[#5b6af5] hover:bg-[#fafbff]">
+                <span class="text-lg">🔗</span><span class="text-xs font-medium">Link</span>
+              </div>
+              <div class="border border-[#ebebeb] rounded-lg p-3.5 flex flex-col items-center gap-2 cursor-pointer hover:border-[#5b6af5] hover:bg-[#fafbff]">
+                <span class="text-lg">📝</span><span class="text-xs font-medium">Text</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-5 pt-4 pb-6">
+            <div class="text-xs text-[#8C899F] font-medium mb-3 tracking-wide">Analytics</div>
+            <div class="grid grid-cols-3 gap-2.5">
+              <div onclick="switchView('track-events')" class="border border-[#ebebeb] rounded-lg p-3.5 flex flex-col items-center gap-2 cursor-pointer hover:border-[#5b6af5] hover:bg-[#fafbff]">
+                <span class="text-lg text-[#1F1F32]">🎯</span><span class="text-xs font-medium">Track events</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-track-events" class="hidden flex-col flex-1">
+          <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-24 h-24 bg-[#f6f7fa] rounded-xl flex items-center justify-center mb-5 text-[#8C899F]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-11 h-11"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><path d="M13 13l-3 3-2-2"/></svg>
+            </div>
+            <div class="text-[15px] font-semibold text-[#1F1F32] mb-1.5">Select an element to define</div>
+            <div class="text-[13px] text-[#8C899F] leading-relaxed max-w-[220px]">Hover over an element that you would like to define.</div>
+            <button onclick="startPicker()" class="mt-6 px-5 py-2.5 bg-[#d45f00] hover:bg-[#b85200] text-white rounded-md text-sm font-semibold inline-flex items-center gap-2 transition-colors">
+              ＋ Define event
+            </button>
+          </div>
+        </div>
+
+        <div id="view-define" class="hidden flex-col">
+          <div class="px-5 py-4 border-b border-[#f0f0f0]">
+            <div class="flex items-center gap-2.5 mb-1.5">
+              <span class="text-[#d45f00] text-sm shrink-0">✦</span>
+              <span id="picked-element-name" class="text-[15px] font-semibold text-[#1F1F32] flex-1 truncate">ACME | Account</span>
+            </div>
+            <span onclick="startPicker()" class="text-[13px] text-[#0176d3] cursor-pointer inline-flex items-center gap-1 mt-1 hover:underline">↺ Reselect</span>
+          </div>
+
+          <div class="px-5 pt-1 pb-3 border-b border-[#f0f0f0]">
+            <div class="flex items-center justify-between py-2.5 text-[13px]">
+              <span class="flex items-center gap-2 text-[#1F1F32]"><span class="text-[#8C899F] text-[13px]">⚡</span> Trigger: Click</span>
+              <span class="text-[#0176d3] cursor-pointer hover:underline">Change</span>
+            </div>
+            <div class="flex items-center justify-between py-2.5 text-[13px] border-t border-[#f5f5f5]">
+              <span class="flex items-center gap-2 text-[#1F1F32]"><span class="text-[#8C899F] text-[13px]">🏷</span> Tags: <span class="text-[#8C899F]">No tags</span></span>
+              <span class="text-[#0176d3] cursor-pointer hover:underline">Add tag</span>
+            </div>
+          </div>
+
+          <div class="flex border-b border-[#e8e8e8]">
+            <div onclick="switchTab('config')" id="tab-config" class="flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#d45f00] border-[#d45f00] mb-[-1px]">Configuration</div>
+            <div onclick="switchTab('vis')" id="tab-vis" class="flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#8C899F] border-transparent mb-[-1px]">Visibility rules</div>
+          </div>
+
+          <div id="panel-config" class="block">
+            <div class="border-b border-[#f0f0f0]">
+              <div class="flex items-center p-4 px-5 cursor-pointer select-none" onclick="toggleCard('card-tracked')">
+                <div class="flex-1">
+                  <div class="text-sm font-semibold text-[#1F1F32]">What will be tracked</div>
+                  <div class="text-xs text-[#8C899F] mt-0.5">1 element selected</div>
+                </div>
+                <span id="card-tracked-chev" class="text-[#8C899F] text-[11px] transition-transform">▾</span>
+              </div>
+              <div id="card-tracked-body" class="px-5 pb-4 block">
+                <div class="flex gap-2 mb-3.5">
+                  <button class="flex-1 py-2 px-3 border border-[#e4e4e4] rounded-md text-[13px] font-medium flex items-center justify-center gap-1.5 hover:border-[#5b6af5]"><span class="text-[#8C899F] text-[9px]">▲</span> Widen</button>
+                  <button class="flex-1 py-2 px-3 border border-[#e4e4e4] rounded-md text-[13px] font-medium flex items-center justify-center gap-1.5 hover:border-[#5b6af5]"><span class="text-[#8C899F] text-[9px]">▼</span> Narrow</button>
+                </div>
+                
+                <div onclick="setRadio('this')" class="flex items-start gap-3 py-3.5 cursor-pointer">
+                  <div id="radio-this" class="w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d45f00]">
+                    <div id="radio-this-dot" class="w-[9px] h-[9px] rounded-full bg-[#d45f00] block"></div>
+                  </div>
+                  <div>
+                    <div class="text-[13px] font-semibold text-[#1F1F32] mb-[3px]">This element</div>
+                    <div class="text-xs text-[#8C899F]">Track highlighted element only.</div>
+                  </div>
+                </div>
+
+                <div onclick="setRadio('similar')" class="flex items-start gap-3 py-3.5 border-t border-[#f5f5f5] cursor-pointer">
+                  <div id="radio-similar" class="w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d0d0d0]">
+                    <div id="radio-similar-dot" class="w-[9px] h-[9px] rounded-full bg-[#d45f00] hidden"></div>
+                  </div>
+                  <div>
+                    <div class="text-[13px] font-semibold text-[#1F1F32] mb-[3px]">Similar elements (<span id="sim-count">0</span>)</div>
+                    <div class="text-xs text-[#8C899F]">Similar elements on this page to track.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="border-b border-[#f0f0f0]">
+              <div class="flex items-center p-4 px-5 cursor-pointer select-none" onclick="toggleCard('card-text')">
+                <div class="flex-1"><div class="text-sm font-semibold text-[#1F1F32]">Filter elements by text</div></div>
+                <span id="card-text-chev" class="text-[#8C899F] text-[11px] transition-transform -rotate-90">▾</span>
+              </div>
+              <div id="card-text-body" class="px-5 pb-4 hidden">
+                <div class="text-xs text-[#8C899F]">Select options to narrow down by text.</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="panel-vis" class="hidden pt-[18px] px-5">
+            <div class="mb-5">
+              <div class="text-sm font-semibold text-[#1F1F32] mb-2.5">Where do you want to track?</div>
+              <select class="w-full p-2.5 border border-[#e4e4e4] rounded-md text-[13px] bg-white outline-none focus:border-[#5b6af5]">
+                <option>Anywhere</option><option>Specific URL</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="sidebar-footer" class="p-3 px-4 border-t border-[#ebebeb] shrink-0 bg-white hidden flex-row items-center gap-2">
+        <button onclick="switchView('studio')" class="flex-1 py-2.5 bg-[#d45f00] text-white rounded-md text-sm font-semibold hover:bg-[#b85200]">Save and proceed</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- 1. View Navigation Logic ---
+    let currentView = 'studio';
+    let historyStack = [];
+
+    function switchView(viewId) {
+      if (currentView !== viewId) historyStack.push(currentView);
+      currentView = viewId;
+      
+      // Hide all views
+      document.getElementById('view-studio').style.display = 'none';
+      document.getElementById('view-track-events').style.display = 'none';
+      document.getElementById('view-define').style.display = 'none';
+      
+      // Show target view
+      if (viewId === 'track-events') document.getElementById('view-track-events').style.display = 'flex';
+      else if (viewId === 'define') document.getElementById('view-define').style.display = 'flex';
+      else document.getElementById('view-studio').style.display = 'flex';
+
+      // Update Header
+      const titles = { 'studio': 'Studio', 'track-events': 'Track events', 'define': 'Define event' };
+      document.getElementById('sidebar-title').innerText = titles[viewId];
+      document.getElementById('back-btn').style.display = (viewId === 'studio') ? 'none' : 'block';
+      document.getElementById('sidebar-footer').style.display = (viewId === 'define') ? 'flex' : 'none';
+    }
+
+    function goBack() {
+      const prev = historyStack.pop();
+      if (prev) {
+        currentView = prev; // prevent pushing to history again
+        switchView(prev);
+        historyStack.pop(); // remove the duplicate added by switchView
+      } else {
+        switchView('studio');
+      }
+      stopPicker(); // ensure picker is off if we navigate back
+    }
+
+    // --- 2. Element Picker Logic ---
+    let isPickerActive = false;
+    const overlay = document.getElementById('wf-overlay');
+    const tooltip = document.getElementById('wf-hover-tip');
+    const msTip = document.getElementById('ms-tooltip');
+    const studioWrapper = document.getElementById('studio-wrapper');
+
+    function startPicker() {
+      isPickerActive = true;
+      document.body.classList.add('picker-on');
+      
+      // Change UI to empty state picker mode
+      switchView('track-events'); 
+      document.getElementById('sidebar-title').innerText = 'Select an element';
+      
+      // Hide Studio sidebar slightly and show floating tooltip
+      studioWrapper.style.transform = 'translateX(10px)';
+      msTip.style.display = 'block';
+
+      // Add listeners
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('click', handleMouseClick, true);
+    }
+
+    function stopPicker() {
+      isPickerActive = false;
+      document.body.classList.remove('picker-on');
+      studioWrapper.style.transform = 'translateX(0)';
+      
+      overlay.style.display = 'none';
+      tooltip.style.display = 'none';
+      msTip.style.display = 'none';
+
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('click', handleMouseClick, true);
+    }
+
+    function handleMouseMove(e) {
+      if (!isPickerActive) return;
+      const el = e.target;
+      
+      // Ignore clicks on the studio sidebar or the overlays
+      if (studioWrapper.contains(el) || msTip.contains(el)) {
+        overlay.style.display = 'none';
+        tooltip.style.display = 'none';
+        return;
+      }
+
+      const rect = el.getBoundingClientRect();
+      overlay.style.display = 'block';
+      overlay.style.left = rect.left + 'px';
+      overlay.style.top = rect.top + 'px';
+      overlay.style.width = rect.width + 'px';
+      overlay.style.height = rect.height + 'px';
+
+      document.getElementById('tip-tag').innerText = el.tagName.toLowerCase();
+      document.getElementById('tip-detail').innerText = el.className ? '.' + el.className.split(' ')[0] : '';
+
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 15) + 'px';
+      tooltip.style.top = (e.clientY + 15) + 'px';
+    }
+
+    function handleMouseClick(e) {
+      if (!isPickerActive) return;
+      const el = e.target;
+      if (studioWrapper.contains(el) || msTip.contains(el)) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Capture element text for the UI
+      let elName = el.innerText.trim().split('\n')[0].substring(0, 30);
+      if (!elName) elName = el.tagName.toLowerCase() + ' element';
+      document.getElementById('picked-element-name').innerText = elName;
+
+      // Calculate similar fake count based on tag
+      const count = document.querySelectorAll(el.tagName).length;
+      document.getElementById('sim-count').innerText = count;
+
+      stopPicker();
+      switchView('define');
+    }
+
+    // --- 3. Define Form UI Logic ---
+    function switchTab(tabId) {
+      const isConf = tabId === 'config';
+      document.getElementById('panel-config').style.display = isConf ? 'block' : 'none';
+      document.getElementById('panel-vis').style.display = isConf ? 'none' : 'block';
+      
+      document.getElementById('tab-config').className = isConf 
+        ? "flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#d45f00] border-[#d45f00] mb-[-1px]" 
+        : "flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#8C899F] border-transparent mb-[-1px]";
+        
+      document.getElementById('tab-vis').className = !isConf 
+        ? "flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#d45f00] border-[#d45f00] mb-[-1px]" 
+        : "flex-1 py-3 text-center text-[13px] font-medium cursor-pointer border-b-2 text-[#8C899F] border-transparent mb-[-1px]";
+    }
+
+    function toggleCard(cardId) {
+      const body = document.getElementById(cardId + '-body');
+      const chev = document.getElementById(cardId + '-chev');
+      if (body.style.display === 'none' || body.classList.contains('hidden')) {
+        body.style.display = 'block';
+        body.classList.remove('hidden');
+        chev.style.transform = 'rotate(0deg)';
+      } else {
+        body.style.display = 'none';
+        chev.style.transform = 'rotate(-90deg)';
+      }
+    }
+
+    function setRadio(opt) {
+      const isThis = opt === 'this';
+      
+      document.getElementById('radio-this').className = isThis 
+        ? "w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d45f00]"
+        : "w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d0d0d0]";
+      document.getElementById('radio-this-dot').style.display = isThis ? 'block' : 'none';
+
+      document.getElementById('radio-similar').className = !isThis 
+        ? "w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d45f00]"
+        : "w-[18px] h-[18px] rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center border-[#d0d0d0]";
+      document.getElementById('radio-similar-dot').style.display = !isThis ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
