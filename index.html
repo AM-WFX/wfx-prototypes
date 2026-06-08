@@ -3,21 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Whatfix Guidance Dashboard Prototype</title>
+  <title>Whatfix Guidance System Prototype</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
     body.picker-on #target-sandbox * { cursor: crosshair !important; }
   </style>
 </head>
-<body class="bg-[#f6f7fa] font-sans antialiased text-[#1F1F32] overflow-hidden select-none">
+<body class="bg-[#f6f7fa] font-['Inter'] text-[14px] antialiased text-[#1F1F32] overflow-hidden select-none">
 
   <div id="wfx-hub-layout" class="flex h-screen w-full overflow-hidden transition-opacity duration-150">
     
     <div id="dash-sidebar" class="w-[260px] bg-[#1a1a2e] text-white flex flex-col shrink-0 relative border-r border-white/5 shadow-xl z-20">
-      <div class="dash-header-switcher w-[235px] h-[60px] mx-auto mt-2 flex items-center justify-center cursor-pointer hover:bg-white/5 rounded-lg transition-colors">
-        <div class="switcher-inner-a w-[211px] h-[44px] flex items-center">
+      
+      <div class="dash-header-switcher mx-3 px-2 h-[60px] mt-2 flex items-center justify-center cursor-pointer hover:bg-white/5 rounded-lg transition-colors">
+        <div class="switcher-inner-a w-full h-[44px] flex items-center">
           <div class="switcher-logo-x w-[44px] h-[44px] flex items-center justify-center shrink-0">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <rect width="16.9705" height="5.65685" transform="matrix(-0.707107 0.707107 0.707107 0.707107 19.9999 8.00003)" fill="#F55800"></rect>
@@ -28,95 +32,153 @@
               <path fill-rule="evenodd" clip-rule="evenodd" d="M3.99994 7.99998L7.99993 12L3.99994 16L-5.6489e-05 12L3.99994 7.99998Z" fill="#FA8A1F"></path>
             </svg>
           </div>
-          <div class="switcher-text-y w-[167px] h-[44px] flex items-center justify-between">
-            <h5 class="h-[24px] leading-[24px] font-semibold text-[14px] text-white tracking-wide">Guidance</h5>
+          <div class="switcher-text-y flex-1 h-[44px] flex items-center justify-between">
+            <h5 class="h-[24px] leading-[24px] font-semibold text-[16px] text-white tracking-wide">Guidance</h5>
             <div class="switcher-icon-wrapper w-[44px] h-[44px] flex items-center justify-center shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40"><path d="M8 9l4-4 4 4M16 15l-4 4-4-4"/></svg>
             </div>
           </div>
         </div>
       </div>
-      <div class="dash-divider h-px bg-white/10 mx-[12.5px] shrink-0 my-1"></div>
 
-      <div class="dash-nav-container w-[235px] h-[436px] mx-auto py-2 flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
-        <div class="dash-account-switch w-[235px] h-[44px] flex items-center justify-center mb-1">
-          <button class="w-[206px] h-[44px] flex items-center rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-            <div class="w-[206px] h-[24px] flex items-center">
+      <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 my-1"></div>
+
+      <div class="dash-nav-container w-full px-3 py-2 flex flex-col flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+        
+        <div class="dash-account-switch w-full h-[44px] flex items-center justify-center mb-1">
+          <button class="w-full h-[44px] flex items-center rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            <div class="w-full h-[24px] flex items-center">
               <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0 text-white/70">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.84079 13.7059C5.79926 13.4177 5.77778 13.1231 5.77778 12.8235C5.77778 10.3597 7.23116 8.23273 9.33333 7.24144M8.79326 18.1176C9.72974 18.6778 10.827 19 12 19C13.173 19 14.2703 18.6778 15.2067 18.1176M18.1592 13.7059C18.2007 13.4177 18.2222 13.1231 18.2222 12.8235C18.2222 10.3597 16.7688 8.23273 14.6667 7.24144M14.6667 6.64706C14.6667 8.10899 13.4728 9.29412 12 9.29412C10.5272 9.29412 9.33333 8.10899 9.33333 6.64706C9.33333 5.18513 10.5272 4 12 4C13.4728 4 14.6667 5.18513 14.6667 6.64706ZM9.33333 16.3529C9.33333 17.8149 8.13943 19 6.66667 19C5.19391 19 4 17.8149 4 16.3529C4 14.891 5.19391 13.7059 6.66667 13.7059C8.13943 13.7059 9.33333 14.891 9.33333 16.3529ZM20 16.3529C20 17.8149 18.8061 19 17.3333 19C15.8606 19 14.6667 17.8149 14.6667 16.3529C14.6667 14.891 15.8606 13.7059 17.3333 13.7059C18.8061 13.7059 20 14.891 20 16.3529Z"></path></svg>
               </div>
               <div class="flex-1 flex items-center justify-between pr-3">
-                <span class="dash-nav-text text-[13px] font-medium text-white/90">Aravind_Demo</span>
-                <span class="text-white/40 text-xs">▾</span>
+                <span class="dash-nav-text font-medium text-white/90 truncate">Aravind_Demo</span>
+                <span class="text-white/40 text-xs shrink-0">▾</span>
               </div>
             </div>
           </button>
         </div>
 
         <div class="dash-nav-primary">
-          <div class="w-[235px] h-[44px] flex items-center justify-center mt-0.5">
-            <a href="#" onclick="changeView('view-dashboard')" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg bg-white/10 text-white font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center">
+          <div class="w-full h-[44px] flex items-center justify-center mt-0.5">
+            <a href="#" onclick="changeView('view-dashboard')" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg bg-white/10 text-white font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
                 <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
                 </div>
-                <span class="dash-nav-text text-[13px] leading-[24px]">Content</span>
+                <span class="dash-nav-text leading-[24px]">Content</span>
               </div>
             </a>
           </div>
-          <div class="w-[235px] h-[44px] flex items-center justify-center">
-            <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="16" rx="1"></rect><line x1="4" y1="8" x2="20" y2="8"></line><line x1="8" y1="4" x2="8" y2="8"></line></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Widget</span></div>
+          
+          <div class="w-full h-[44px] flex items-center justify-center">
+            <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
+                <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="16" rx="1"></rect><line x1="4" y1="8" x2="20" y2="8"></line><line x1="8" y1="4" x2="8" y2="8"></line></svg>
+                </div>
+                <span class="dash-nav-text leading-[24px]">Widget</span>
+              </div>
             </a>
           </div>
-          <div class="w-[235px] h-[44px] flex items-center justify-center">
-            <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path><rect x="9" y="3" width="6" height="4" rx="2"></rect><path d="M9 17v-5"></path><path d="M12 17v-1"></path><path d="M15 17v-3"></path></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Guidance Analytics</span></div>
+          
+          <div class="w-full h-[44px] flex items-center justify-center">
+            <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
+                <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path><rect x="9" y="3" width="6" height="4" rx="2"></rect><path d="M9 17v-5"></path><path d="M12 17v-1"></path><path d="M15 17v-3"></path></svg>
+                </div>
+                <span class="dash-nav-text leading-[24px]">Guidance Analytics</span>
+              </div>
             </a>
           </div>
-          <div class="w-[235px] h-[44px] flex items-center justify-center">
-            <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 3h-4a2 2 0 0 0 -2 2v12a4 4 0 0 0 8 0v-12a2 2 0 0 0 -2 -2"></path><path d="M13 7.35l-2 -2a2 2 0 0 0 -2.828 0l-2.828 2.828a2 2 0 0 0 0 2.828l9 9"></path><path d="M7.3 13h-2.3a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h12"></path></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Style</span></div>
+
+          <div class="w-full h-[44px] flex items-center justify-center">
+            <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
+                <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 3h-4a2 2 0 0 0 -2 2v12a4 4 0 0 0 8 0v-12a2 2 0 0 0 -2 -2"></path><path d="M13 7.35l-2 -2a2 2 0 0 0 -2.828 0l-2.828 2.828a2 2 0 0 0 0 2.828l9 9"></path><path d="M7.3 13h-2.3a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h12"></path></svg>
+                </div>
+                <span class="dash-nav-text leading-[24px]">Style</span>
+              </div>
             </a>
           </div>
-          <div class="w-[235px] h-[44px] flex items-center justify-center">
-            <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M7.859 6h-2.834a2.025 2.025 0 0 0 -2.025 2.025v2.834c0 .537 .213 1.052 .593 1.432l6.116 6.116a2.025 2.025 0 0 0 2.864 0l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-6.117 -6.116a2.025 2.025 0 0 0 -1.431 -.593z"></path><path d="M17.573 18.407l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-7.117 -7.116"></path></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Tags</span></div>
+
+          <div class="w-full h-[44px] flex items-center justify-center">
+            <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
+                <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M7.859 6h-2.834a2.025 2.025 0 0 0 -2.025 2.025v2.834c0 .537 .213 1.052 .593 1.432l6.116 6.116a2.025 2.025 0 0 0 2.864 0l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-6.117 -6.116a2.025 2.025 0 0 0 -1.431 -.593z"></path><path d="M17.573 18.407l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-7.117 -7.116"></path></svg>
+                </div>
+                <span class="dash-nav-text leading-[24px]">Tags</span>
+              </div>
             </a>
           </div>
-          <div class="w-[235px] h-[44px] flex items-center justify-center">
-            <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-              <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Settings</span></div>
+
+          <div class="w-full h-[44px] flex items-center justify-center">
+            <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+              <div class="w-full h-[24px] flex items-center">
+                <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+                <span class="dash-nav-text leading-[24px]">Settings</span>
+              </div>
             </a>
           </div>
         </div>
       </div>
-      <div class="dash-divider h-px bg-white/10 mx-[12.5px] shrink-0 my-1"></div>
 
-      <div class="dash-nav-secondary w-[235px] mx-auto py-2 flex flex-col flex-1 overflow-y-auto custom-scrollbar">
-        <div class="w-[235px] h-[44px] flex items-center justify-center">
-          <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-            <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><div class="w-[24px] h-[24px] rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-[11px]">JD</div></div><span class="dash-nav-text text-[13px] leading-[24px]">John Doe</span></div>
+      <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 my-1"></div>
+
+      <div class="dash-nav-secondary w-full px-3 py-2 flex flex-col shrink-0">
+        <div class="w-full h-[44px] flex items-center justify-center">
+          <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+            <div class="w-full h-[24px] flex items-center">
+              <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                <div class="w-[24px] h-[24px] rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-[11px]">JD</div>
+              </div>
+              <span class="dash-nav-text leading-[24px]">John Doe</span>
+            </div>
           </a>
         </div>
-        <div class="w-[235px] h-[44px] flex items-center justify-center">
-          <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-            <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0 relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path><path d="M9 17v1a3 3 0 0 0 6 0v-1"></path></svg><div class="absolute top-[2px] right-[10px] w-2 h-2 bg-[#0975d7] rounded-full border border-[#1a1a2e]"></div></div><span class="dash-nav-text text-[13px] leading-[24px]">Notifications</span></div>
+
+        <div class="w-full h-[44px] flex items-center justify-center">
+          <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+            <div class="w-full h-[24px] flex items-center">
+              <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0 relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path><path d="M9 17v1a3 3 0 0 0 6 0v-1"></path></svg>
+                <div class="absolute top-[2px] right-[10px] w-2 h-2 bg-[#0975d7] rounded-full border border-[#1a1a2e]"></div>
+              </div>
+              <span class="dash-nav-text leading-[24px]">Notifications</span>
+            </div>
           </a>
         </div>
-        <div class="w-[235px] h-[44px] flex items-center justify-center">
-          <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-            <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path><line x1="3" y1="6" x2="3" y2="19"></line><line x1="12" y1="6" x2="12" y2="19"></line><line x1="21" y1="6" x2="21" y2="19"></line></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Resources</span></div>
+
+        <div class="w-full h-[44px] flex items-center justify-center">
+          <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+            <div class="w-full h-[24px] flex items-center">
+              <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path><line x1="3" y1="6" x2="3" y2="19"></line><line x1="12" y1="6" x2="12" y2="19"></line><line x1="21" y1="6" x2="21" y2="19"></line></svg>
+              </div>
+              <span class="dash-nav-text leading-[24px]">Resources</span>
+            </div>
           </a>
         </div>
-        <div class="w-[235px] h-[44px] flex items-center justify-center">
-          <a href="#" class="dash-nav-btn w-[206px] h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
-            <div class="w-[206px] h-[24px] flex items-center"><div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"></path><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"></path></svg></div><span class="dash-nav-text text-[13px] leading-[24px]">Chat</span></div>
+
+        <div class="w-full h-[44px] flex items-center justify-center">
+          <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">
+            <div class="w-full h-[24px] flex items-center">
+              <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"></path><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"></path></svg>
+              </div>
+              <span class="dash-nav-text leading-[24px]">Chat</span>
+            </div>
           </a>
         </div>
       </div>
 
-      <div class="dash-divider h-px bg-white/10 mx-[12.5px] shrink-0 mb-4 mt-2"></div>
+      <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 mb-4 mt-2"></div>
+
       <div class="dash-footer flex justify-center pb-6 shrink-0">
         <a href="https://whatfix.com" target="_blank" class="opacity-80 hover:opacity-100 transition-opacity block w-[86px] h-[44px]">
           <svg width="86" height="44" viewBox="0 0 86 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,30 +201,30 @@
     <div class="flex-1 relative bg-white">
       <div id="view-dashboard" class="absolute inset-0 flex flex-col min-w-0 bg-white z-10 transition-opacity duration-150">
         
-        <div class="dash-top-bar h-[76px] px-[25px] flex items-center justify-between shrink-0 bg-white">
+        <header class="dash-top-bar h-[76px] px-[25px] flex items-center justify-between shrink-0 bg-white">
           <div class="dash-title-container flex items-center gap-4">
-            <h1 class="text-[18px] font-bold text-[#1F1F32]">Content</h1>
+            <h1 class="text-[24px] font-bold text-[#1F1F32]">Content</h1>
           </div>
-          <button class="dash-top-actions h-[44px] px-[16px] bg-[#d45f00] text-white text-xs font-semibold rounded-[6px] hover:bg-[#b85200]">Create Content ▾</button>
-        </div>
+          <button class="dash-top-actions h-[44px] px-[16px] bg-[#d45f00] text-white font-semibold rounded-[6px] hover:bg-[#b85200]">Create Content ▾</button>
+        </header>
 
         <div class="dash-toolbar px-[25px] border-b border-[#eef1f6] flex items-center justify-between shrink-0">
-          <div class="dash-tabs flex gap-6 h-[48px] text-[13px]">
+          <div class="dash-tabs flex gap-6 h-[48px]">
             <button class="tab-item tab-active relative flex items-center h-full font-medium text-[#0975d7] after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:w-full after:h-[4px] after:bg-[#0975d7] after:rounded-t-[4px]">Draft</button>
             <button class="tab-item flex items-center h-full font-medium text-[#6b697b] hover:text-[#1f1f32] transition-colors">Ready</button>
             <button class="tab-item flex items-center h-full font-medium text-[#6b697b] hover:text-[#1f1f32] transition-colors">Production</button>
           </div>
           
           <div class="toolbar-right flex items-center gap-2 py-2">
-            <button class="btn-create-folder h-[44px] flex items-center gap-1 text-[#0975d7] font-medium px-[8px] hover:bg-blue-50 rounded transition-colors text-xs">
+            <button class="btn-create-folder h-[44px] flex items-center gap-1 text-[#0975d7] font-medium px-[8px] hover:bg-blue-50 rounded transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2"></path><line x1="12" y1="10" x2="12" y2="16"></line><line x1="9" y1="13" x2="15" y2="13"></line></svg> Create Folder
             </button>
             <div class="dash-search-box w-[265px] h-[44px] border border-[#d7d6d1] rounded-[4px] flex items-center gap-2 px-[12px] bg-white">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" class="text-gray-400"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
-              <input type="text" placeholder="Search content" class="outline-none bg-transparent w-full text-[13px]">
+              <input type="text" placeholder="Search content" class="outline-none bg-transparent w-full">
             </div>
             <div class="dash-toolbar-actions flex gap-2">
-              <button class="btn-filter w-[90px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center gap-1 text-[#3d3c52] hover:bg-gray-50 transition-colors text-xs font-medium">
+              <button class="btn-filter w-[90px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center gap-1 text-[#3d3c52] hover:bg-gray-50 transition-colors font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 6h16M7 12h10M10 18h4"/></svg> Filter
               </button>
               <button class="btn-export w-[44px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center text-[#3d3c52] hover:bg-gray-50 transition-colors">
@@ -187,7 +249,7 @@
                 <th class="w-[30%]">Last updated by</th>
               </tr>
             </thead>
-            <tbody class="text-[13px] text-[#374151]">
+            <tbody class="text-[#374151]">
               <tr class="table-row h-[48px] hover:bg-[#fff8f5] border-b border-[#f2f2f8] transition-colors group">
                 <td class="pl-2"><input type="checkbox" class="rounded"></td>
                 <td class="font-medium flex items-center justify-between h-[48px]">
@@ -378,283 +440,15 @@
         </div>
 
       </div>
-
-      <div id="view-dvm" class="absolute inset-0 flex flex-col min-w-0 bg-[#f6f6f9] hidden z-10 transition-opacity duration-150">
-        <div id="dvm-header" class="bg-white shrink-0">
-          <div class="px-6 pt-4 pb-1">
-            <div class="dvm-breadcrumbs flex items-center gap-2 text-[13px] mb-2 text-gray-500">
-              <button onclick="changeView('view-dashboard')" class="hover:text-gray-800 font-medium">All Content</button>
-              <span class="text-gray-400">/</span>
-              <span class="text-gray-800 font-medium">Test Flow 1</span>
-              <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded-full text-[11px] font-semibold tracking-wide">Editing</span>
-            </div>
-            
-            <div class="dvm-title-area flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">🔀</span>
-                <h2 class="text-xl font-bold text-gray-800">Test Flow 1</h2>
-              </div>
-              <div class="flex items-center gap-2">
-                <button class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold flex items-center gap-1 hover:bg-gray-50">
-                  ✨ Enhance ▾
-                </button>
-                <button class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold hover:bg-gray-50">
-                  Preview ▾
-                </button>
-                <button onclick="changeView('view-studio')" class="dvm-btn-primary px-4 py-1.5 bg-[#d45f00] text-white text-xs font-semibold rounded-md hover:bg-[#b85200] transition-colors shadow-sm flex items-center gap-1.5">
-                  Launch live edit 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"></path><line x1="10" y1="14" x2="20" y2="4"></line><polyline points="15 4 20 4 20 9"></polyline></svg>
-                </button>
-                <button class="px-2 py-1.5 border border-gray-200 text-gray-600 rounded-md text-xs font-semibold hover:bg-gray-50">⋮</button>
-              </div>
-            </div>
-
-            <div class="dvm-tabs flex gap-6 h-full pt-1 text-[13px] font-medium border-b border-gray-200">
-              <button class="border-b-2 border-[#d45f00] text-[#d45f00] h-full pb-2 font-semibold">Steps</button>
-              <button class="text-gray-500 pb-2">Details</button>
-            </div>
-          </div>
-        </div>
-
-        <div id="dvm-canvas" class="flex-1 overflow-y-auto custom-scrollbar p-6">
-          <div class="max-w-5xl mx-auto">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-bold text-gray-800 text-sm">1 Step</h3>
-              <div class="flex gap-1 bg-white border border-gray-200 rounded p-0.5">
-                <button class="p-1 text-blue-600 bg-blue-50 rounded"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
-                <button class="p-1 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg></button>
-              </div>
-            </div>
-
-            <div class="flex gap-4 flex-wrap">
-              <div class="dvm-step-card w-[320px] bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden">
-                <div class="card-header p-3 border-b border-gray-100 flex items-center gap-2 cursor-grab">
-                  <span class="text-gray-300">⋮⋮</span>
-                  <span class="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">1</span>
-                  <span class="font-bold text-gray-800 text-[13px]">Click here</span>
-                </div>
-                <div class="card-preview h-[180px] bg-gray-50 border-b border-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
-                  <div class="w-full h-full bg-white border border-gray-200 shadow-sm rounded relative">
-                    <div class="absolute top-10 left-10 w-24 h-10 border-2 border-blue-500 bg-blue-500/10"></div>
-                  </div>
-                </div>
-                <div class="card-footer p-3 flex items-center justify-between bg-white text-xs">
-                  <span class="text-gray-500">On click of selected element</span>
-                  <div class="flex gap-2">
-                    <button class="text-gray-400 hover:text-gray-600">⑂</button>
-                    <button class="text-gray-400 hover:text-gray-600">⋮</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="dvm-end-card w-[320px] bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col p-4 justify-center gap-2 cursor-pointer hover:border-gray-300 transition-colors">
-                <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mb-1">🏁</div>
-                <h4 class="font-bold text-gray-800 text-[13px]">End Message</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="dvm-footer" class="h-[60px] bg-white border-t border-gray-200 px-6 flex items-center justify-between shrink-0">
-          <button onclick="changeView('view-dashboard')" class="text-gray-500 hover:text-gray-800 text-xs font-semibold flex items-center gap-1">
-            ← Back to view mode
-          </button>
-          <div class="flex items-center gap-2">
-            <button disabled class="px-4 py-2 border border-gray-200 text-gray-400 text-xs font-semibold rounded-md cursor-not-allowed">Discard</button>
-            <button disabled class="px-4 py-2 bg-[#d45f00]/50 text-white text-xs font-semibold rounded-md cursor-not-allowed">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div id="view-studio" class="hidden h-screen w-full relative overflow-hidden transition-opacity duration-150 z-50">
-    <div id="target-sandbox" class="absolute inset-0 z-0 overflow-hidden bg-[#eef1f6] flex flex-col text-[13px]">
-      <div class="bg-[#032d60] text-white px-3 flex items-center gap-3 h-[48px] shrink-0">
-        <span class="font-semibold text-xs tracking-wide">Sales Console Sandbox</span>
-      </div>
-      <div class="flex-1 flex overflow-hidden p-3 gap-3">
-        <div class="w-[250px] shrink-0 bg-white border border-slate-200 rounded-lg p-4 shadow-sm space-y-3">
-          <div class="flex items-center gap-2">
-            <div id="crm-avatar-node" class="w-7 h-7 bg-[#5b6af5] rounded flex items-center justify-center text-white font-bold">▦</div>
-            <span class="font-bold text-sm text-[#1F1F32]">ACME Corp</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="studio-overlays">
-      <div id="wf-picker-box" class="pointer-events-none fixed z-[9000] border-2 border-[#d45f00] bg-[#d45f00]/10 rounded-[3px] hidden"></div>
-      <div id="wf-picker-tip" class="pointer-events-none fixed z-[9001] bg-[#1F1F32]/95 text-white px-2.5 py-1.5 rounded-md text-[11px] font-mono hidden max-w-[260px]">
-        <span id="tip-tag" class="text-[#ff9966]"></span> <span id="tip-detail" class="text-[#7ecfed]"></span>
-      </div>
-      <div id="picker-alert-banner" class="absolute bottom-4 right-[420px] bg-[#1F1F32] text-white rounded-xl p-3.5 z-[9050] min-w-[340px] shadow-2xl hidden text-[13px]">
-        <div class="flex items-center gap-3">
-          <div class="flex-1"><div class="font-semibold text-orange-400 mb-0.5">Reselect Anchor Active</div></div>
-          <button onclick="stopStudioPicker()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs rounded-md font-medium">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="studio-panel" class="absolute top-0 right-0 h-full flex z-[9999] shadow-[-16px_0_35px_rgba(0,0,0,0.12)] bg-transparent transition-transform duration-300">
-      <div class="studio-nav-strip w-[48px] h-full bg-[#1f1f32] flex flex-col items-center py-3 justify-between border-r border-white/5">
-        <div class="flex flex-col items-center gap-1.5 w-full">
-          <button onclick="changeView('view-dvm')" class="studio-strip-btn w-[40px] h-[40px] flex items-center justify-center rounded bg-white/10 text-white hover:bg-white/15" title="Exit to Hub"><span class="text-base">🔥</span></button>
-        </div>
-      </div>
-      <div class="w-[380px] min-w-[380px] bg-white border-l border-[#dfdde7] flex flex-col h-full shrink-0">
-        <header class="studio-panel-header h-[52px] px-4 border-b border-[#f2f2f8] flex items-center justify-between bg-white text-[14px] font-bold text-[#1f1f32]">
-          <div class="flex items-center gap-2">
-            <button id="studio-nav-back-arrow" onclick="reverseToStudioHome()" class="text-gray-400 hover:text-gray-800 pr-1 hidden">←</button>
-            <span id="studio-panel-header-title">Whatfix Studio</span>
-          </div>
-          <button onclick="changeView('view-dvm')" class="w-6 h-6 flex items-center justify-center text-[#8c899f] hover:text-[#1f1f32] text-xs">✕</button>
-        </header>
-
-        <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col bg-white">
-          <div id="studio-view-home" class="p-4 space-y-5 flex flex-col">
-            <div class="studio-category-block space-y-2">
-              <h4 class="category-title text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Content</h4>
-              <div class="studio-grid grid grid-cols-3 gap-2 justify-items-center">
-                <div onclick="drillIntoStepEditor('Flow', '🌊')" class="studio-grid-tile w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 hover:border-[#ea5834] group">
-                  <div class="tile-icon-box w-[97px] h-[58.75px] bg-[#fcfcfd] group-hover:bg-[#fff4f0] flex items-center justify-center shrink-0">
-                    <div class="tile-icon-wrapper w-[48px] h-[48px] flex items-center justify-center"><span class="text-lg">🌊</span></div>
-                  </div>
-                  <div class="tile-text-box w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
-                    <span class="tile-text text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] truncate w-full">Flow</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="studio-view-editor" class="hidden flex-col flex-1 divide-y divide-gray-100">
-            <div class="editor-step-profile p-4 bg-gray-50/50 space-y-1">
-              <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Configure Element Anchors</div>
-              <h3 id="editor-active-element-label" class="text-sm font-bold text-gray-800">Flow Configuration</h3>
-            </div>
-            <div class="editor-node-selector p-4 space-y-2">
-              <span class="text-[11px] font-bold text-[#5a574e] uppercase tracking-wider block">Target Node Selector</span>
-              <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div class="min-w-0 flex-1 pr-2"><div id="studio-selected-node-string" class="text-xs font-semibold text-gray-800 font-mono truncate">div#crm-avatar-node</div></div>
-                <button onclick="startStudioPicker()" class="px-2.5 py-1.5 bg-white border border-gray-200 hover:border-[#ea5834] rounded text-xs font-semibold text-[#d45f00] hover:bg-orange-50 transition-all shrink-0">↺ Reselect</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="studio-view-footer" class="p-3 border-t border-gray-100 bg-gray-50/50 hidden items-center justify-end">
-          <button onclick="saveStepConfigurationAndExit()" class="studio-save-btn w-full py-2.5 bg-[#d45f00] hover:bg-[#b85200] text-white text-xs font-semibold rounded-md shadow transition-all">💾 Save Step</button>
-        </div>
-      </div>
     </div>
   </div>
 
   <script>
+    // DASHBOARD ROUTING ENGINE
     function changeView(targetStageId) {
-      const hubLayout = document.getElementById('wfx-hub-layout');
-      const dashboardView = document.getElementById('view-dashboard');
-      const dvmView = document.getElementById('view-dvm');
-      const studioView = document.getElementById('view-studio');
-
-      if (targetStageId === 'view-dashboard') {
-        hubLayout.classList.remove('hidden');
-        studioView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
-        dvmView.classList.add('hidden');
-      } else if (targetStageId === 'view-dvm') {
-        hubLayout.classList.remove('hidden');
-        studioView.classList.add('hidden');
-        dashboardView.classList.add('hidden');
-        dvmView.classList.remove('hidden');
-      } else if (targetStageId === 'view-studio') {
-        hubLayout.classList.add('hidden');
-        studioView.classList.remove('hidden');
-        reverseToStudioHome();
+      if(targetStageId === 'view-dvm') {
+        window.location.href = 'dvm.html';
       }
-    }
-
-    function drillIntoStepEditor(tileTypeName, tileIconMark) {
-      document.getElementById('studio-view-home').classList.add('hidden');
-      document.getElementById('studio-view-editor').classList.remove('hidden');
-      document.getElementById('studio-view-footer').classList.remove('hidden');
-      document.getElementById('studio-view-footer').classList.add('flex');
-      document.getElementById('studio-nav-back-arrow').classList.remove('hidden');
-      document.getElementById('studio-panel-header-title').innerText = "Configure " + tileTypeName;
-      document.getElementById('editor-active-element-label').innerText = tileIconMark + " " + tileTypeName;
-    }
-
-    function reverseToStudioHome() {
-      document.getElementById('studio-view-home').classList.remove('hidden');
-      document.getElementById('studio-view-editor').classList.add('hidden');
-      document.getElementById('studio-view-footer').classList.remove('flex');
-      document.getElementById('studio-view-footer').classList.add('hidden');
-      document.getElementById('studio-nav-back-arrow').classList.add('hidden');
-      document.getElementById('studio-panel-header-title').innerText = "Whatfix Studio";
-      stopStudioPicker();
-    }
-
-    let isElementPickerActive = false;
-    const overlayTargetBoxBox = document.getElementById('wf-picker-box');
-    const hoverCoordinateTooltipBox = document.getElementById('wf-picker-tip');
-    const bottomAlertControlTooltipBox = document.getElementById('picker-alert-banner');
-    const overlayStudioSidebarWrapperBox = document.getElementById('studio-panel');
-
-    function startStudioPicker() {
-      isElementPickerActive = true;
-      document.body.classList.add('picker-on');
-      overlayStudioSidebarWrapperBox.style.transform = 'translateX(332px)';
-      bottomAlertControlTooltipBox.classList.remove('hidden');
-      document.addEventListener('mousemove', runPickerMouseMoveTrackingPipeline);
-      document.addEventListener('click', capturePickerMouseClickInterceptPipeline, true);
-    }
-
-    function stopStudioPicker() {
-      isElementPickerActive = false;
-      document.body.classList.remove('picker-on');
-      overlayStudioSidebarWrapperBox.style.transform = 'translateX(0)';
-      bottomAlertControlTooltipBox.classList.add('hidden');
-      overlayTargetBoxBox.classList.add('hidden');
-      hoverCoordinateTooltipBox.classList.add('hidden');
-      document.removeEventListener('mousemove', runPickerMouseMoveTrackingPipeline);
-      document.removeEventListener('click', capturePickerMouseClickInterceptPipeline, true);
-    }
-
-    function runPickerMouseMoveTrackingPipeline(e) {
-      if (!isElementPickerActive) return;
-      const focusedElementTargetNode = e.target;
-      if (overlayStudioSidebarWrapperBox.contains(focusedElementTargetNode) || bottomAlertControlTooltipBox.contains(focusedElementTargetNode)) {
-        overlayTargetBoxBox.classList.add('hidden');
-        hoverCoordinateTooltipBox.classList.add('hidden');
-        return;
-      }
-      const clientBoundingRectCoordinates = focusedElementTargetNode.getBoundingClientRect();
-      overlayTargetBoxBox.classList.remove('hidden');
-      overlayTargetBoxBox.style.left = clientBoundingRectCoordinates.left + 'px';
-      overlayTargetBoxBox.style.top = clientBoundingRectCoordinates.top + 'px';
-      overlayTargetBoxBox.style.width = clientBoundingRectCoordinates.width + 'px';
-      overlayTargetBoxBox.style.height = clientBoundingRectCoordinates.height + 'px';
-      document.getElementById('tip-tag').innerText = focusedElementTargetNode.tagName.toLowerCase();
-      document.getElementById('tip-detail').innerText = focusedElementTargetNode.id ? '#' + focusedElementTargetNode.id : (focusedElementTargetNode.className ? '.' + focusedElementTargetNode.className.split(' ')[0] : '');
-      hoverCoordinateTooltipBox.classList.remove('hidden');
-      hoverCoordinateTooltipBox.style.left = (e.clientX + 12) + 'px';
-      hoverCoordinateTooltipBox.style.top = (e.clientY + 12) + 'px';
-    }
-
-    function capturePickerMouseClickInterceptPipeline(e) {
-      if (!isElementPickerActive) return;
-      const clickedElementTargetNode = e.target;
-      if (overlayStudioSidebarWrapperBox.contains(clickedElementTargetNode) || bottomAlertControlTooltipBox.contains(clickedElementTargetNode)) return;
-      e.preventDefault();
-      e.stopPropagation();
-      let targetIdentifiedStringText = clickedElementTargetNode.tagName.toLowerCase() + (clickedElementTargetNode.id ? '#' + clickedElementTargetNode.id : '');
-      document.getElementById('studio-selected-node-string').innerText = targetIdentifiedStringText;
-      stopStudioPicker();
-    }
-
-    function saveStepConfigurationAndExit() {
-      reverseToStudioHome();
     }
   </script>
 </body>
