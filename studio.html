@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whatfix Studio Live Edit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    body.picker-on #target-sandbox * { cursor: crosshair !important; }
+  </style>
+</head>
+<body class="bg-white font-['Inter'] text-[14px] antialiased text-[#1F1F32] overflow-hidden select-none">
+
+  <div id="view-studio" class="h-screen w-full relative overflow-hidden z-50">
+    
+    <div id="target-sandbox" class="absolute inset-0 z-0 overflow-hidden bg-[#eef1f6] flex flex-col text-[13px]">
+      <div class="sandbox-header h-[48px] bg-[#032d60] text-white px-3 flex items-center gap-3 shrink-0">
+        <div class="w-7 h-7 bg-[#0176d3] rounded flex items-center justify-center font-bold text-[10px]">
+          <svg class="icon icon-tabler icon-tabler-grid-dots" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="19" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle></svg>
+        </div>
+        <span class="font-semibold text-xs tracking-wide">Sales Console Sandbox</span>
+      </div>
+      
+      <div class="sandbox-canvas flex-1 flex overflow-hidden p-3 gap-3">
+        <div class="sandbox-left-col w-[250px] shrink-0 bg-white border border-slate-200 rounded-lg p-4 shadow-sm space-y-3">
+          <div class="flex items-center gap-2">
+            <div id="crm-avatar-node" class="w-7 h-7 bg-[#5b6af5] rounded flex items-center justify-center text-white font-bold">
+              <svg class="icon icon-tabler icon-tabler-building-skyscraper" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="3" y1="21" x2="21" y2="21"></line><path d="M5 21v-14l8 -4v18"></path><path d="M19 21v-10l-6 -4"></path><line x1="9" y1="9" x2="9" y2="9.01"></line><line x1="9" y1="12" x2="9" y2="12.01"></line><line x1="9" y1="15" x2="9" y2="15.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line></svg>
+            </div>
+            <span class="font-bold text-sm text-[#1F1F32]">ACME Corp</span>
+          </div>
+          <button id="crm-follow-trigger" class="w-full py-1.5 border border-slate-200 text-[#0176d3] rounded hover:bg-slate-50 transition-colors text-xs font-semibold">
+            + Follow Record
+          </button>
+        </div>
+        <div class="sandbox-workspace flex-1 bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col overflow-hidden">
+          <div class="p-4 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600">Active Node Frame Workspace</div>
+          <div class="flex-1 p-6 flex items-center justify-center text-center text-slate-400 text-xs leading-relaxed max-w-sm mx-auto">
+            Hover mouse coordinates out into this sandbox framework matrix layer while reselection processes are running to isolate alternative visual structural markers.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="studio-overlays">
+      <div id="wf-picker-box" class="pointer-events-none fixed z-[9000] border-2 border-[#d45f00] bg-[#d45f00]/10 rounded-[3px] hidden transition-all duration-75"></div>
+      <div id="wf-picker-tip" class="pointer-events-none fixed z-[9001] bg-[#1F1F32]/95 text-white px-2.5 py-1.5 rounded-md text-[11px] font-mono hidden max-w-[260px] shadow-lg">
+        <span id="tip-tag" class="text-[#ff9966]"></span> <span id="tip-detail" class="text-[#7ecfed]"></span>
+      </div>
+      
+      <div id="picker-alert-banner" class="absolute bottom-4 right-[420px] bg-[#1F1F32] text-white rounded-xl p-3.5 z-[9050] min-w-[340px] shadow-2xl hidden text-[13px] border border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="flex-1">
+            <div class="font-semibold text-orange-400 mb-0.5">Reselect Anchor Active</div>
+            <div class="text-[11px] text-white/60 leading-tight">Click any component element inside the background layout.</div>
+          </div>
+          <button onclick="stopStudioPicker()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs rounded-md font-medium transition-colors">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="studio-panel" class="absolute top-0 right-0 h-full flex z-[9999] shadow-[-16px_0_35px_rgba(0,0,0,0.12)] bg-transparent transition-transform duration-300">
+      
+      <div class="studio-nav-strip w-[48px] h-full bg-[#1f1f32] flex flex-col items-center py-3 justify-between border-r border-white/5">
+        <div class="flex flex-col items-center gap-1.5 w-full">
+          <a href="dvm.html" class="studio-strip-btn w-[40px] h-[40px] flex items-center justify-center rounded bg-white/10 text-white hover:bg-white/15 transition-colors" title="Exit to Hub">
+            <svg class="icon icon-tabler icon-tabler-door-exit" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M13 12v.01"></path><path d="M3 21h18"></path><path d="M5 21v-16a2 2 0 0 1 2 -2h7.5m2.5 10.5v7.5"></path><path d="M14 7h7m-3 -3l3 3l-3 3"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="studio-panel-container w-[380px] min-w-[380px] bg-white border-l border-[#dfdde7] flex flex-col h-full shrink-0">
+        
+        <header class="studio-panel-header h-[52px] px-4 border-b border-[#f2f2f8] flex items-center justify-between bg-white text-[14px] font-bold text-[#1f1f32]">
+          <div class="flex items-center gap-2">
+            <button id="studio-nav-back-arrow" onclick="reverseToStudioHome()" class="text-[#8c899f] hover:text-[#1f1f32] pr-1 hidden transition-colors">
+              <svg class="icon icon-tabler icon-tabler-arrow-left" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="12" x2="11" y2="18"></line><line x1="5" y1="12" x2="11" y2="6"></line></svg>
+            </button>
+            <span id="studio-panel-header-title">Whatfix Studio</span>
+          </div>
+          <a href="dvm.html" class="w-6 h-6 flex items-center justify-center text-[#8c899f] hover:text-[#1f1f32] text-xs transition-colors">
+            <svg class="icon icon-tabler icon-tabler-x" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </a>
+        </header>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col bg-white">
+          
+          <div id="studio-view-home" class="p-4 space-y-5 flex flex-col">
+            <div class="studio-category-block space-y-2">
+              <h4 class="category-title text-[12px] font-bold text-[#5a574e] tracking-[0.03em] uppercase px-1">Content</h4>
+              <div class="studio-grid grid grid-cols-3 gap-2 justify-items-center">
+                
+                <div onclick="drillIntoStepEditor('Flow', '<svg width=18 height=18 viewBox=\'0 0 24 24\' stroke=currentColor stroke-width=2 fill=none class=\'inline-block\'><path d=\'M12 21v-4M12 13v-4M12 5v-2M10 21h4M8 5v4h11l2 -2l-2 -2zM14 13v4h-8l-2 -2l2 -2z\'/></svg>')" class="studio-grid-tile w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 hover:border-[#ea5834] group">
+                  <div class="tile-icon-box w-[97px] h-[58.75px] bg-[#fcfcfd] group-hover:bg-[#fff4f0] flex items-center justify-center shrink-0 transition-colors">
+                    <div class="tile-icon-wrapper w-[48px] h-[48px] flex items-center justify-center text-[#5a574e] group-hover:text-[#ea5834] transition-colors">
+                      <svg class="icon icon-tabler icon-tabler-directions" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 21v-4"></path><path d="M12 13v-4"></path><path d="M12 5v-2"></path><path d="M10 21h4"></path><path d="M8 5v4h11l2 -2l-2 -2z"></path><path d="M14 13v4h-8l-2 -2l2 -2z"></path></svg>
+                    </div>
+                  </div>
+                  <div class="tile-text-box w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
+                    <span class="tile-text text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] truncate w-full transition-colors">Flow</span>
+                  </div>
+                </div>
+
+                <div onclick="drillIntoStepEditor('Link', '<svg width=18 height=18 viewBox=\'0 0 24 24\' stroke=currentColor stroke-width=2 fill=none class=\'inline-block\'><path d=\'M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5\'/></svg>')" class="studio-grid-tile w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 hover:border-[#ea5834] group">
+                  <div class="tile-icon-box w-[97px] h-[58.75px] bg-[#fcfcfd] group-hover:bg-[#fff4f0] flex items-center justify-center shrink-0 transition-colors">
+                    <div class="tile-icon-wrapper w-[48px] h-[48px] flex items-center justify-center text-[#5a574e] group-hover:text-[#ea5834] transition-colors">
+                      <svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5"></path></svg>
+                    </div>
+                  </div>
+                  <div class="tile-text-box w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
+                    <span class="tile-text text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] truncate w-full transition-colors">Link</span>
+                  </div>
+                </div>
+
+                <div onclick="drillIntoStepEditor('Text', '<svg width=18 height=18 viewBox=\'0 0 24 24\' stroke=currentColor stroke-width=2 fill=none class=\'inline-block\'><path d=\'M4 6h16M4 12h16M4 18h12\'/></svg>')" class="studio-grid-tile w-[99px] h-[96px] bg-white border border-[#d7d6d1] rounded-[4px] cursor-pointer flex flex-col overflow-hidden transition-all duration-150 hover:border-[#ea5834] group">
+                  <div class="tile-icon-box w-[97px] h-[58.75px] bg-[#fcfcfd] group-hover:bg-[#fff4f0] flex items-center justify-center shrink-0 transition-colors">
+                    <div class="tile-icon-wrapper w-[48px] h-[48px] flex items-center justify-center text-[#5a574e] group-hover:text-[#ea5834] transition-colors">
+                      <svg class="icon icon-tabler icon-tabler-typography" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="4" y1="20" x2="7" y2="20"></line><line x1="14" y1="20" x2="21" y2="20"></line><line x1="6.9" y1="15" x2="13.8" y2="15"></line><line x1="10.2" y1="6.3" x2="5.5" y2="20"></line><polyline points="18 20 15 11 15.5 9.5"></polyline></svg>
+                    </div>
+                  </div>
+                  <div class="tile-text-box w-[97px] h-[35.25px] flex items-center justify-center px-1 text-center shrink-0">
+                    <span class="tile-text text-[11px] font-medium text-[#5a574e] group-hover:text-[#403d35] truncate w-full transition-colors">Text</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div id="studio-view-editor" class="hidden flex-col flex-1 divide-y divide-[#e5e7eb]">
+            <div class="editor-step-profile p-4 bg-[#f9fafb] space-y-1">
+              <div class="text-[11px] font-bold text-[#6b697b] uppercase tracking-wider">Configure Element Anchors</div>
+              <h3 id="editor-active-element-label" class="text-sm font-bold text-[#1f1f32] flex items-center gap-1.5">Flow Configuration</h3>
+            </div>
+            
+            <div class="editor-node-selector p-4 space-y-2">
+              <span class="text-[11px] font-bold text-[#5a574e] uppercase tracking-wider block">Target Node Selector</span>
+              <div class="p-3 bg-[#f9fafb] border border-[#e5e7eb] rounded-lg flex items-center justify-between">
+                <div class="min-w-0 flex-1 pr-2">
+                  <div id="studio-selected-node-string" class="text-xs font-semibold text-[#1f1f32] font-mono truncate">div#crm-avatar-node</div>
+                </div>
+                <button onclick="startStudioPicker()" class="px-2.5 py-1.5 bg-white border border-[#d7d6d1] hover:border-[#ea5834] rounded text-xs font-semibold text-[#d45f00] hover:bg-[#fff8f5] transition-all shrink-0 flex items-center gap-1">
+                  <svg class="icon icon-tabler icon-tabler-focus-2" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r=".5" fill="currentColor"></circle><circle cx="12" cy="12" r="7"></circle><line x1="12" y1="3" x2="12" y2="5"></line><line x1="3" y1="12" x2="5" y2="12"></line><line x1="12" y1="19" x2="12" y2="21"></line><line x1="19" y1="12" x2="21" y2="12"></line></svg> Reselect
+                </button>
+              </div>
+            </div>
+
+            <div class="editor-config-form p-4 space-y-2">
+              <label class="text-[11px] font-bold text-[#5a574e] uppercase tracking-wider block">Step Message</label>
+              <textarea rows="3" class="w-full border border-[#d7d6d1] rounded-lg p-2.5 text-[13px] outline-none focus:border-[#ea5834] focus:ring-1 focus:ring-[#ea5834]/20 resize-none transition-all">Click here to begin the process.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div id="studio-view-footer" class="p-3 border-t border-[#e5e7eb] bg-[#f9fafb] hidden items-center justify-end">
+          <button onclick="saveStepConfigurationAndExit()" class="studio-save-btn w-full py-[10px] bg-[#d45f00] hover:bg-[#b85200] text-white text-[12px] font-semibold rounded-[6px] shadow-sm transition-all flex items-center justify-center gap-1.5">
+            <svg class="icon icon-tabler icon-tabler-device-floppy" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"></path><circle cx="12" cy="14" r="2"></circle><polyline points="14 4 14 8 8 8 8 4"></polyline></svg>
+            Save Step
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Panel Toggle Logic
+    function drillIntoStepEditor(tileTypeName, tileIconMark) {
+      document.getElementById('studio-view-home').classList.add('hidden');
+      document.getElementById('studio-view-editor').classList.remove('hidden');
+      document.getElementById('studio-view-editor').classList.add('flex');
+      document.getElementById('studio-view-footer').classList.remove('hidden');
+      document.getElementById('studio-view-footer').classList.add('flex');
+      
+      document.getElementById('studio-nav-back-arrow').classList.remove('hidden');
+      document.getElementById('studio-panel-header-title').innerText = "Configure " + tileTypeName;
+      document.getElementById('editor-active-element-label').innerHTML = tileIconMark + " " + tileTypeName + " Configuration";
+    }
+
+    function reverseToStudioHome() {
+      document.getElementById('studio-view-home').classList.remove('hidden');
+      document.getElementById('studio-view-editor').classList.add('hidden');
+      document.getElementById('studio-view-editor').classList.remove('flex');
+      document.getElementById('studio-view-footer').classList.remove('flex');
+      document.getElementById('studio-view-footer').classList.add('hidden');
+      
+      document.getElementById('studio-nav-back-arrow').classList.add('hidden');
+      document.getElementById('studio-panel-header-title').innerText = "Whatfix Studio";
+      stopStudioPicker();
+    }
+
+    // Element Picker Logic
+    let isElementPickerActive = false;
+    const overlayTargetBoxBox = document.getElementById('wf-picker-box');
+    const hoverCoordinateTooltipBox = document.getElementById('wf-picker-tip');
+    const bottomAlertControlTooltipBox = document.getElementById('picker-alert-banner');
+    const overlayStudioSidebarWrapperBox = document.getElementById('studio-panel');
+
+    function startStudioPicker() {
+      isElementPickerActive = true;
+      document.body.classList.add('picker-on');
+
+      // Slide panel slightly right to signify "picker mode"
+      overlayStudioSidebarWrapperBox.style.transform = 'translateX(332px)';
+      bottomAlertControlTooltipBox.classList.remove('hidden');
+
+      document.addEventListener('mousemove', runPickerMouseMoveTrackingPipeline);
+      document.addEventListener('click', capturePickerMouseClickInterceptPipeline, true);
+    }
+
+    function stopStudioPicker() {
+      isElementPickerActive = false;
+      document.body.classList.remove('picker-on');
+
+      overlayStudioSidebarWrapperBox.style.transform = 'translateX(0)';
+      bottomAlertControlTooltipBox.classList.add('hidden');
+      overlayTargetBoxBox.classList.add('hidden');
+      hoverCoordinateTooltipBox.classList.add('hidden');
+
+      document.removeEventListener('mousemove', runPickerMouseMoveTrackingPipeline);
+      document.removeEventListener('click', capturePickerMouseClickInterceptPipeline, true);
+    }
+
+    function runPickerMouseMoveTrackingPipeline(e) {
+      if (!isElementPickerActive) return;
+      const focusedElementTargetNode = e.target;
+
+      // Don't track if hovering over the studio panel or the alert banner
+      if (overlayStudioSidebarWrapperBox.contains(focusedElementTargetNode) || bottomAlertControlTooltipBox.contains(focusedElementTargetNode)) {
+        overlayTargetBoxBox.classList.add('hidden');
+        hoverCoordinateTooltipBox.classList.add('hidden');
+        return;
+      }
+
+      // Draw bounding box
+      const clientBoundingRectCoordinates = focusedElementTargetNode.getBoundingClientRect();
+      overlayTargetBoxBox.classList.remove('hidden');
+      overlayTargetBoxBox.style.left = clientBoundingRectCoordinates.left + 'px';
+      overlayTargetBoxBox.style.top = clientBoundingRectCoordinates.top + 'px';
+      overlayTargetBoxBox.style.width = clientBoundingRectCoordinates.width + 'px';
+      overlayTargetBoxBox.style.height = clientBoundingRectCoordinates.height + 'px';
+
+      // Update tooltip text
+      document.getElementById('tip-tag').innerText = focusedElementTargetNode.tagName.toLowerCase();
+      document.getElementById('tip-detail').innerText = focusedElementTargetNode.id ? '#' + focusedElementTargetNode.id : (focusedElementTargetNode.className ? '.' + focusedElementTargetNode.className.split(' ')[0] : '');
+
+      // Follow cursor
+      hoverCoordinateTooltipBox.classList.remove('hidden');
+      hoverCoordinateTooltipBox.style.left = (e.clientX + 16) + 'px';
+      hoverCoordinateTooltipBox.style.top = (e.clientY + 16) + 'px';
+    }
+
+    function capturePickerMouseClickInterceptPipeline(e) {
+      if (!isElementPickerActive) return;
+      const clickedElementTargetNode = e.target;
+
+      if (overlayStudioSidebarWrapperBox.contains(clickedElementTargetNode) || bottomAlertControlTooltipBox.contains(clickedElementTargetNode)) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Build target string
+      let targetIdentifiedStringText = clickedElementTargetNode.tagName.toLowerCase() + (clickedElementTargetNode.id ? '#' + clickedElementTargetNode.id : '');
+      document.getElementById('studio-selected-node-string').innerText = targetIdentifiedStringText;
+      
+      stopStudioPicker();
+    }
+
+    function saveStepConfigurationAndExit() {
+      // Simulate saving delay, then back to home
+      reverseToStudioHome();
+    }
+  </script>
+</body>
+</html>
