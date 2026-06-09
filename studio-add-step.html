@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whatfix Studio - Add Step</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body.picker-on #target-sandbox * { cursor: crosshair !important; }
+  </style>
+</head>
+<body class="bg-white font-['Inter'] text-[14px] antialiased text-[#1F1F32] overflow-hidden select-none picker-on">
+
+  <div id="view-studio-add-step" class="h-screen w-full relative overflow-hidden z-50">
+    
+    <div id="target-sandbox" class="absolute inset-0 z-0 bg-[#eef1f6] flex flex-col text-[13px] shadow-inner">
+      <div class="sandbox-header h-[48px] bg-[#032d60] text-white px-3 flex items-center gap-3 shrink-0">
+        <div class="w-7 h-7 bg-[#0176d3] rounded flex items-center justify-center font-bold text-[10px]">
+          <svg class="icon icon-tabler icon-tabler-grid-dots" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="19" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle></svg>
+        </div>
+        <span class="font-semibold text-xs tracking-wide">Sales Console Sandbox</span>
+      </div>
+      
+      <div class="sandbox-canvas flex-1 flex overflow-hidden p-3 gap-3">
+        <div class="sandbox-left-col w-[250px] shrink-0 bg-white border border-slate-200 rounded-lg p-4 shadow-sm space-y-3">
+          <div class="flex items-center gap-2">
+            <div id="crm-avatar-node" class="w-7 h-7 bg-[#5b6af5] rounded flex items-center justify-center text-white font-bold">
+              <svg class="icon icon-tabler icon-tabler-building-skyscraper" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="3" y1="21" x2="21" y2="21"></line><path d="M5 21v-14l8 -4v18"></path><path d="M19 21v-10l-6 -4"></path><line x1="9" y1="9" x2="9" y2="9.01"></line><line x1="9" y1="12" x2="9" y2="12.01"></line><line x1="9" y1="15" x2="9" y2="15.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line></svg>
+            </div>
+            <span class="font-bold text-sm text-[#1F1F32]">ACME Corp</span>
+          </div>
+          <button class="w-full py-1.5 border border-slate-200 text-[#0176d3] rounded hover:bg-slate-50 transition-colors text-xs font-semibold">+ Follow Record</button>
+        </div>
+        <div class="sandbox-workspace flex-1 bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col overflow-hidden">
+          <div class="p-4 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600">Active Node Frame Workspace</div>
+          <div class="flex-1 p-6 flex items-center justify-center text-center text-slate-400 text-xs leading-relaxed max-w-sm mx-auto">
+            Hover over elements in the application to anchor your new step.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wf-picker-box" class="pointer-events-none fixed z-[9000] border-2 border-[#d45f00] bg-[#d45f00]/10 rounded-[3px] hidden transition-all duration-75"></div>
+
+    <div id="wfx-minimised-editor" class="absolute bottom-[24px] right-[24px] w-[420px] bg-[#1f1f32] rounded-lg shadow-2xl border border-[#3d3c52] flex flex-col z-[9900]">
+      
+      <div class="minimised-header flex items-start p-4 gap-3 border-b border-[#3d3c52]">
+        <div class="pt-0.5 text-[#8c899f] cursor-grab">
+          <svg class="icon icon-tabler icon-tabler-grip-vertical" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+        </div>
+        
+        <div class="flex-1 flex flex-col gap-1.5">
+          <div id="step-title-text" class="text-[14px] font-bold text-white leading-tight">Selecting Element - Add Step 4</div>
+          <div class="text-[12px] text-[#8c899f] leading-tight mt-1">Press <strong class="text-white font-semibold">Shift+M</strong> for navigation mode</div>
+          <div class="text-[12px] text-[#8c899f] leading-tight">Use <strong class="text-white font-semibold">Shift+S</strong> for multi-select mode for similar elements</div>
+        </div>
+        
+        <a href="dvm.html" class="px-3 py-1.5 border border-[#3d3c52] text-[#d7d6d1] text-[12px] font-semibold rounded hover:bg-white/10 hover:text-white transition-colors">
+          Cancel
+        </a>
+      </div>
+
+      <div class="minimised-step-type flex items-center justify-center p-3 gap-4 bg-[#1a1a2e] rounded-b-lg">
+        <span class="text-[13px] font-medium text-white">Step Type</span>
+        
+        <div class="navi-toggle-button-container flex items-center bg-[#1f1f32] border border-[#3d3c52] rounded p-0.5">
+          <button class="toggle-btn-active bg-[#3d3c52] text-white px-3 py-1.5 rounded-[4px] text-[12px] font-semibold shadow-sm transition-colors">
+            Attached to element
+          </button>
+          
+          <div class="w-[1px] h-[16px] bg-[#3d3c52] mx-1"></div>
+          
+          <button class="toggle-btn-inactive text-[#8c899f] hover:text-white px-3 py-1.5 rounded-[4px] text-[12px] font-medium transition-colors">
+            Free-floating
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script>
+    // Global variable to keep track of the current step we are adding
+    let currentStepNum = '4';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      currentStepNum = urlParams.get('step') || '4'; // fallback if no param is found
+      
+      const titleElement = document.getElementById('step-title-text');
+      if (titleElement) {
+        titleElement.innerText = `Selecting Element - Add Step ${currentStepNum}`;
+      }
+    });
+
+    // SIMULATED ELEMENT PICKER (Hover effects)
+    const pickerBox = document.getElementById('wf-picker-box');
+    const floatingEditor = document.getElementById('wfx-minimised-editor');
+    
+    document.addEventListener('mousemove', (e) => {
+      const target = e.target;
+      
+      if (floatingEditor.contains(target)) {
+        pickerBox.classList.add('hidden');
+        return;
+      }
+
+      const rect = target.getBoundingClientRect();
+      pickerBox.classList.remove('hidden');
+      pickerBox.style.left = rect.left + 'px';
+      pickerBox.style.top = rect.top + 'px';
+      pickerBox.style.width = rect.width + 'px';
+      pickerBox.style.height = rect.height + 'px';
+    });
+
+    // Capture click to simulate selecting an element and moving to full DVM modal
+    document.addEventListener('click', (e) => {
+      if (floatingEditor.contains(e.target)) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Route back to DVM and trigger the modal for the new step!
+      window.location.href = `dvm.html?expandStep=${currentStepNum}`;
+    }, true);
+  </script>
+</body>
+</html>
