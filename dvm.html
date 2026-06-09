@@ -443,7 +443,7 @@
       }
     }
 
-    function closeAllMenus(event) {
+    function closeAllMenus() {
       document.querySelectorAll('.split-dropdown, .step-action-menu').forEach(menu => {
         menu.classList.add('hidden');
       });
@@ -474,6 +474,21 @@
       isModalReselectActive = false;
       document.getElementById('modal-screenshot-container').classList.remove('reselect-mode');
     }
+
+    // --- AUTO-OPEN MODAL ROUTING ---
+    // If returning from studio-add-step.html, catch the ?expandStep=X parameter and open it!
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const expandStep = urlParams.get('expandStep');
+      
+      if (expandStep) {
+        // Strip the parameter from the URL cleanly so it doesn't re-trigger on a normal refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Open the modal for the requested step
+        openExpandedModal(parseInt(expandStep));
+      }
+    });
 
     // --- MODAL RESELECT LOGIC ---
     let isModalReselectActive = false;
