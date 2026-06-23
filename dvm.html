@@ -11,8 +11,7 @@
   <style>
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
-    .add-step-dropdown.hidden { display: none; }
-    .branch-dropdown.hidden { display: none; }
+    .split-dropdown.hidden, .add-step-dropdown.hidden, .branch-dropdown.hidden { display: none; }
     
     .wfx-switch { appearance: none; width: 32px; height: 18px; background: #cbd5e1; border-radius: 9px; position: relative; cursor: pointer; outline: none; transition: background 0.2s; }
     .wfx-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.2s; }
@@ -23,29 +22,71 @@
     #modal-screenshot-container.reselect-mode { cursor: crosshair; }
     .dummy-sf-element { position: absolute; z-index: 20; pointer-events: none; transition: all 0.1s; }
     #modal-screenshot-container.reselect-mode .dummy-sf-element { pointer-events: auto; cursor: crosshair; }
-    #modal-screenshot-container.reselect-mode .dummy-sf-element:hover {
-      background-color: rgba(212, 95, 0, 0.15);
-      border: 2px dashed #d45f00;
-    }
+    #modal-screenshot-container.reselect-mode .dummy-sf-element:hover { background-color: rgba(212, 95, 0, 0.15); border: 2px dashed #d45f00; }
 
-    /* Simple smooth entrance for modals */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up {
-      animation: fadeInUp 0.2s ease-out forwards;
-    }
+    /* Animations */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in-up { animation: fadeInUp 0.2s ease-out forwards; }
+    @keyframes importGlow { 0% { border-color: #0975d7; box-shadow: 0 0 0 0 rgba(9, 117, 215, 0.4); } 30% { border-color: #0975d7; box-shadow: 0 0 0 6px rgba(9, 117, 215, 0.15); } 100% { border-color: #e5e7eb; box-shadow: 0 0 0 0 rgba(9, 117, 215, 0); } }
+    .animate-import-glow .glow-target { animation: importGlow 2.5s ease-out forwards; }
 
-    /* Import Success Glow */
-    @keyframes importGlow {
-      0% { border-color: #0975d7; box-shadow: 0 0 0 0 rgba(9, 117, 215, 0.4); }
-      30% { border-color: #0975d7; box-shadow: 0 0 0 6px rgba(9, 117, 215, 0.15); }
-      100% { border-color: #e5e7eb; box-shadow: 0 0 0 0 rgba(9, 117, 215, 0); }
+    /* ========================================= */
+    /* DVM VIEW ENGINE: GRID vs LIST MODE STYLES */
+    /* ========================================= */
+    
+    .step-card-inner { transition: all 0.2s ease; }
+    .plus-btn-wrapper { position: absolute; z-index: 30; display: flex; flex-direction: column; align-items: center; }
+
+    /* GRID MODE */
+    #dvm-grid-container.view-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 368px);
+      gap: 48px;
+      justify-content: start;
     }
-    .animate-import-glow .glow-target {
-      animation: importGlow 2.5s ease-out forwards;
+    #dvm-grid-container.view-mode-grid .step-card-wrapper { width: 368px; height: 322px; position: relative; }
+    #dvm-grid-container.view-mode-grid .end-message-card { width: 368px; height: 322px; position: relative; }
+    #dvm-grid-container.view-mode-grid .end-message-inner { flex-direction: column; justify-content: center; }
+    #dvm-grid-container.view-mode-grid .plus-btn-wrapper {
+      top: 50%;
+      right: -24px;
+      transform: translate(50%, -50%);
     }
+    #dvm-grid-container.view-mode-grid .add-step-dropdown { left: 12px; top: calc(100% + 8px); }
+    #dvm-grid-container.view-mode-grid .list-collapse-toggle { display: none; }
+
+    /* LIST MODE */
+    #dvm-grid-container.view-mode-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      width: 100%;
+    }
+    #dvm-grid-container.view-mode-list .step-card-wrapper {
+      width: 620px;
+      height: 514px; 
+      position: relative;
+    }
+    #dvm-grid-container.view-mode-list .end-message-card { width: 620px; height: 70px; position: relative; }
+    #dvm-grid-container.view-mode-list .end-message-inner { flex-direction: row; justify-content: center; height: 70px; padding: 0 20px;}
+    #dvm-grid-container.view-mode-list .plus-btn-wrapper {
+      left: 50%;
+      bottom: -32px;
+      transform: translate(-50%, 50%);
+    }
+    #dvm-grid-container.view-mode-list .add-step-dropdown {
+      left: 50%;
+      top: calc(100% + 8px);
+      transform: translateX(-50%);
+    }
+    #dvm-grid-container.view-mode-list .list-collapse-toggle { display: flex; }
+
+    /* Collapsed List State Override - Strictly Scoped to view-mode-list */
+    #dvm-grid-container.view-mode-list .step-card-wrapper.collapsed { height: 70px; }
+    #dvm-grid-container.view-mode-list .step-card-wrapper.collapsed .collapsible-section { display: none !important; }
+    #dvm-grid-container.view-mode-list .step-card-wrapper.collapsed .card-header { height: 70px; border-bottom-color: transparent; border-radius: 0.5rem; }
+    #dvm-grid-container.view-mode-list .step-card-wrapper.collapsed .icon-chevron { transform: rotate(180deg); }
   </style>
 </head>
 <body class="bg-[#f6f7fa] font-['Inter'] text-[14px] antialiased text-[#1F1F32] overflow-hidden select-none">
@@ -206,7 +247,7 @@
 
       <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 mb-4 mt-2"></div>
 
-      <div class="dash-footer flex justify-center pb-6 shrink-0">
+      <div class="dash-footer flex justify-center pb-6 shrink-0 mt-auto">
         <a href="https://whatfix.com" target="_blank" class="opacity-80 hover:opacity-100 transition-opacity block">
           <img src="Whatfix_Ink700.jpg" alt="Whatfix" class="h-[28px] w-auto object-contain">
         </a>
@@ -257,32 +298,53 @@
         </div>
 
         <div id="dvm-canvas" class="flex-1 overflow-y-auto custom-scrollbar p-6">
-          <div class="dvm-toolbar flex items-center justify-between mb-6">
-            <h3 id="total-steps-count" class="font-bold text-[#1f1f32] text-sm">4 Steps</h3>
-            <div class="flex gap-1 bg-white border border-[#d7d6d1] rounded-[4px] p-[2px]">
-              <button class="p-1.5 text-[#0975d7] bg-blue-50 rounded-[2px]"><svg class="icon icon-tabler icon-tabler-layout-grid" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
-              <button class="p-1.5 text-[#6b697b] hover:text-[#1f1f32] transition-colors"><svg class="icon icon-tabler icon-tabler-layout-list" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg></button>
+          
+          <div id="dvm-toolbar" class="dvm-toolbar flex items-center justify-between mb-6 max-w-[1200px] mx-auto w-full transition-all duration-300">
+            <div class="flex items-center gap-3">
+              <h3 id="total-steps-count" class="font-bold text-[#1f1f32] text-[16px]">4 Steps</h3>
+              <button id="btn-toggle-collapse" onclick="toggleCollapseAll()" class="hidden items-center gap-1 text-[#0975d7] font-semibold text-[13px] hover:bg-blue-50/50 px-2 py-1 rounded transition-colors ml-2">
+                <span id="collapse-text">Collapse all</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path id="collapse-icon-path" d="M6 15l6 -6l6 6"></path></svg>
+              </button>
+            </div>
+            <div class="flex gap-1 bg-white border border-[#dfdde7] rounded-[4px] p-[2px] shadow-sm">
+              <button id="btn-view-grid" onclick="setViewMode('grid')" class="p-1.5 bg-blue-50 text-[#0975d7] rounded-[2px] transition-colors" title="Grid View">
+                <svg class="icon icon-tabler icon-tabler-layout-grid" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
+              </button>
+              <button id="btn-view-list" onclick="setViewMode('list')" class="p-1.5 text-[#6b697b] hover:text-[#1f1f32] rounded-[2px] transition-colors" title="List View">
+                <svg class="icon icon-tabler icon-tabler-layout-list" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg>
+              </button>
+              <button class="p-1.5 text-[#6b697b] hover:text-[#1f1f32] rounded-[2px] transition-colors" title="Full Screen">
+                <svg class="icon icon-tabler icon-tabler-arrows-diagonal" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 4 20 4 20 8"></polyline><line x1="14" y1="10" x2="20" y2="4"></line><polyline points="8 20 4 20 4 16"></polyline><line x1="4" y1="20" x2="10" y2="14"></line></svg>
+              </button>
             </div>
           </div>
 
-          <div id="dvm-grid-container" class="dvm-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div id="dvm-grid-container" class="view-mode-grid max-w-[1200px] mx-auto">
             
-            <div class="relative w-[368px] h-[322px] group/step step-card-item">
-              <div onclick="openExpandedModal(1)" class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
-                <div class="card-header h-[48px] px-3 flex items-center gap-2 bg-white border-b border-[#f2f2f8] rounded-t-lg" onclick="event.stopPropagation()">
-                  <svg class="icon icon-tabler icon-tabler-grip-vertical text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
-                  <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full">1</span>
-                  <span class="font-bold text-[#3d3c52] text-[13px] truncate">Click here</span>
+            <div class="step-card-wrapper group/step step-card-item">
+              <div onclick="openExpandedModal(1)" class="step-card-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
+                <div class="card-header h-[48px] px-3 flex items-center justify-between bg-white border-b border-[#f2f2f8] transition-all" onclick="event.stopPropagation()">
+                  <div class="flex items-center gap-2">
+                    <svg class="text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full border border-[#dfdde7]">1</span>
+                    <span class="font-bold text-[#3d3c52] text-[13px] truncate">Click here</span>
+                  </div>
+                  <div class="list-collapse-toggle items-center">
+                    <button class="p-1.5 text-[#6b697b] hover:bg-gray-100 rounded transition-colors" onclick="toggleCardCollapse(event, this)">
+                      <svg class="icon-chevron transition-transform duration-200" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 15l-6 -6l-6 6"></path></svg>
+                    </button>
+                  </div>
                 </div>
-                <div class="card-preview flex-1 bg-[#f9fafb] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
+                <div class="card-preview collapsible-section flex-1 bg-[#fcfcfd] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
                   <div class="w-full h-full bg-white border border-[#e5e7eb] shadow-sm rounded flex items-center justify-center text-[#d7d6d1] text-xs font-medium">[Dummy Image Area]</div>
                 </div>
-                <div class="card-footer h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
+                <div class="card-footer collapsible-section h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
                   <span class="text-[12px] text-[#6b697b]">On click of selected element</span>
                   <div class="flex gap-1.5 text-[#6b697b]">
                     <div class="relative flex items-center justify-center">
                       <button class="p-1 hover:bg-gray-50 rounded transition-colors" onclick="toggleBranchDropdown(event, this)">
-                        <svg class="icon icon-tabler icon-tabler-git-branch" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
                       </button>
                       <ul class="branch-dropdown hidden absolute top-[calc(100%+4px)] right-0 w-[180px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                         <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
@@ -294,17 +356,16 @@
                       </ul>
                     </div>
                     <button class="p-1 hover:bg-red-50 hover:text-red-600 rounded transition-colors" onclick="deleteStep(event, this)" title="Delete Step">
-                      <svg class="icon icon-tabler icon-tabler-trash" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                     </button>
                   </div>
                 </div>
               </div>
-              
-              <div class="absolute left-[380px] top-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative">
+              <div class="plus-btn-wrapper">
+                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative shadow-sm">
                   <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
-                <ul class="add-step-dropdown hidden absolute top-[calc(100%+8px)] left-[12px] w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
+                <ul class="add-step-dropdown hidden absolute w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                   <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add steps
                   </li>
@@ -315,22 +376,29 @@
               </div>
             </div>
 
-            <div class="relative w-[368px] h-[322px] group/step step-card-item">
-              <div onclick="openExpandedModal(2)" class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
-                <div class="card-header h-[48px] px-3 flex items-center gap-2 bg-white border-b border-[#f2f2f8] rounded-t-lg" onclick="event.stopPropagation()">
-                  <svg class="icon icon-tabler icon-tabler-grip-vertical text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
-                  <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full">2</span>
-                  <span class="font-bold text-[#3d3c52] text-[13px] truncate">Enter details</span>
+            <div class="step-card-wrapper group/step step-card-item">
+              <div onclick="openExpandedModal(2)" class="step-card-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
+                <div class="card-header h-[48px] px-3 flex items-center justify-between bg-white border-b border-[#f2f2f8] transition-all" onclick="event.stopPropagation()">
+                  <div class="flex items-center gap-2">
+                    <svg class="text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full border border-[#dfdde7]">2</span>
+                    <span class="font-bold text-[#3d3c52] text-[13px] truncate">Enter Details</span>
+                  </div>
+                  <div class="list-collapse-toggle items-center">
+                    <button class="p-1.5 text-[#6b697b] hover:bg-gray-100 rounded transition-colors" onclick="toggleCardCollapse(event, this)">
+                      <svg class="icon-chevron transition-transform duration-200" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 15l-6 -6l-6 6"></path></svg>
+                    </button>
+                  </div>
                 </div>
-                <div class="card-preview flex-1 bg-[#f9fafb] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
+                <div class="card-preview collapsible-section flex-1 bg-[#fcfcfd] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
                   <div class="w-full h-full bg-white border border-[#e5e7eb] shadow-sm rounded flex items-center justify-center text-[#d7d6d1] text-xs font-medium">[Dummy Image Area]</div>
                 </div>
-                <div class="card-footer h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
+                <div class="card-footer collapsible-section h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
                   <span class="text-[12px] text-[#6b697b]">On click of selected element</span>
                   <div class="flex gap-1.5 text-[#6b697b]">
                     <div class="relative flex items-center justify-center">
                       <button class="p-1 hover:bg-gray-50 rounded transition-colors" onclick="toggleBranchDropdown(event, this)">
-                        <svg class="icon icon-tabler icon-tabler-git-branch" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
                       </button>
                       <ul class="branch-dropdown hidden absolute top-[calc(100%+4px)] right-0 w-[180px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                         <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
@@ -342,16 +410,16 @@
                       </ul>
                     </div>
                     <button class="p-1 hover:bg-red-50 hover:text-red-600 rounded transition-colors" onclick="deleteStep(event, this)" title="Delete Step">
-                      <svg class="icon icon-tabler icon-tabler-trash" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="absolute left-[380px] top-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative">
+              <div class="plus-btn-wrapper">
+                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative shadow-sm">
                   <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
-                <ul class="add-step-dropdown hidden absolute top-[calc(100%+8px)] left-[12px] w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
+                <ul class="add-step-dropdown hidden absolute w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                   <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add steps
                   </li>
@@ -362,22 +430,29 @@
               </div>
             </div>
 
-            <div class="relative w-[368px] h-[322px] group/step step-card-item">
-              <div onclick="openExpandedModal(3)" class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
-                <div class="card-header h-[48px] px-3 flex items-center gap-2 bg-white border-b border-[#f2f2f8] rounded-t-lg" onclick="event.stopPropagation()">
-                  <svg class="icon icon-tabler icon-tabler-grip-vertical text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
-                  <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full">3</span>
-                  <span class="font-bold text-[#3d3c52] text-[13px] truncate">Select option</span>
+            <div class="step-card-wrapper group/step step-card-item">
+              <div onclick="openExpandedModal(3)" class="step-card-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
+                <div class="card-header h-[48px] px-3 flex items-center justify-between bg-white border-b border-[#f2f2f8]" onclick="event.stopPropagation()">
+                  <div class="flex items-center gap-2">
+                    <svg class="text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full border border-[#dfdde7]">3</span>
+                    <span class="font-bold text-[#3d3c52] text-[13px] truncate">Select Option</span>
+                  </div>
+                  <div class="list-collapse-toggle items-center">
+                    <button class="p-1.5 text-[#6b697b] hover:bg-gray-100 rounded transition-colors" onclick="toggleCardCollapse(event, this)">
+                      <svg class="icon-chevron transition-transform duration-200" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 15l-6 -6l-6 6"></path></svg>
+                    </button>
+                  </div>
                 </div>
-                <div class="card-preview flex-1 bg-[#f9fafb] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
+                <div class="card-preview collapsible-section flex-1 bg-[#fcfcfd] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
                   <div class="w-full h-full bg-white border border-[#e5e7eb] shadow-sm rounded flex items-center justify-center text-[#d7d6d1] text-xs font-medium">[Dummy Image Area]</div>
                 </div>
-                <div class="card-footer h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
+                <div class="card-footer collapsible-section h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
                   <span class="text-[12px] text-[#6b697b]">On click of selected element</span>
                   <div class="flex gap-1.5 text-[#6b697b]">
                     <div class="relative flex items-center justify-center">
                       <button class="p-1 hover:bg-gray-50 rounded transition-colors" onclick="toggleBranchDropdown(event, this)">
-                        <svg class="icon icon-tabler icon-tabler-git-branch" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
                       </button>
                       <ul class="branch-dropdown hidden absolute top-[calc(100%+4px)] right-0 w-[180px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                         <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
@@ -389,16 +464,16 @@
                       </ul>
                     </div>
                     <button class="p-1 hover:bg-red-50 hover:text-red-600 rounded transition-colors" onclick="deleteStep(event, this)" title="Delete Step">
-                      <svg class="icon icon-tabler icon-tabler-trash" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="absolute left-[380px] top-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative">
+              <div class="plus-btn-wrapper">
+                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative shadow-sm">
                   <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
-                <ul class="add-step-dropdown hidden absolute top-[calc(100%+8px)] left-[12px] w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
+                <ul class="add-step-dropdown hidden absolute w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                   <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add steps
                   </li>
@@ -409,22 +484,29 @@
               </div>
             </div>
 
-            <div class="relative w-[368px] h-[322px] group/step step-card-item">
-              <div onclick="openExpandedModal(4)" class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
-                <div class="card-header h-[48px] px-3 flex items-center gap-2 bg-white border-b border-[#f2f2f8] rounded-t-lg" onclick="event.stopPropagation()">
-                  <svg class="icon icon-tabler icon-tabler-grip-vertical text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
-                  <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full">4</span>
-                  <span class="font-bold text-[#3d3c52] text-[13px] truncate">Submit</span>
+            <div class="step-card-wrapper group/step step-card-item">
+              <div onclick="openExpandedModal(4)" class="step-card-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
+                <div class="card-header h-[48px] px-3 flex items-center justify-between bg-white border-b border-[#f2f2f8]" onclick="event.stopPropagation()">
+                  <div class="flex items-center gap-2">
+                    <svg class="text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full border border-[#dfdde7]">4</span>
+                    <span class="font-bold text-[#3d3c52] text-[13px] truncate">Submit</span>
+                  </div>
+                  <div class="list-collapse-toggle items-center">
+                    <button class="p-1.5 text-[#6b697b] hover:bg-gray-100 rounded transition-colors" onclick="toggleCardCollapse(event, this)">
+                      <svg class="icon-chevron transition-transform duration-200" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 15l-6 -6l-6 6"></path></svg>
+                    </button>
+                  </div>
                 </div>
-                <div class="card-preview flex-1 bg-[#f9fafb] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
+                <div class="card-preview collapsible-section flex-1 bg-[#fcfcfd] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
                   <div class="w-full h-full bg-white border border-[#e5e7eb] shadow-sm rounded flex items-center justify-center text-[#d7d6d1] text-xs font-medium">[Dummy Image Area]</div>
                 </div>
-                <div class="card-footer h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
+                <div class="card-footer collapsible-section h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
                   <span class="text-[12px] text-[#6b697b]">On click of selected element</span>
                   <div class="flex gap-1.5 text-[#6b697b]">
                     <div class="relative flex items-center justify-center">
                       <button class="p-1 hover:bg-gray-50 rounded transition-colors" onclick="toggleBranchDropdown(event, this)">
-                        <svg class="icon icon-tabler icon-tabler-git-branch" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
                       </button>
                       <ul class="branch-dropdown hidden absolute top-[calc(100%+4px)] right-0 w-[180px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                         <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
@@ -436,16 +518,16 @@
                       </ul>
                     </div>
                     <button class="p-1 hover:bg-red-50 hover:text-red-600 rounded transition-colors" onclick="deleteStep(event, this)" title="Delete Step">
-                      <svg class="icon icon-tabler icon-tabler-trash" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="absolute left-[380px] top-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative">
+              <div class="plus-btn-wrapper">
+                <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative shadow-sm">
                   <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
-                <ul class="add-step-dropdown hidden absolute top-[calc(100%+8px)] left-[12px] w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
+                <ul class="add-step-dropdown hidden absolute w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                   <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add steps
                   </li>
@@ -456,31 +538,26 @@
               </div>
             </div>
 
-            <div class="relative w-[368px] h-[322px]">
-              <div class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#d1d5db] hover:shadow transition-all group">
-                <div class="w-12 h-12 rounded-full bg-[#f6f6f9] text-[#6b697b] flex items-center justify-center group-hover:bg-[#f0f0f4] transition-colors">
-                  <svg class="icon icon-tabler icon-tabler-flag-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 14h14v-9h-14v16"></path></svg>
+            <div class="end-message-card">
+              <div class="end-message-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex items-center gap-3 cursor-pointer hover:border-[#d1d5db] hover:shadow transition-all group">
+                <div class="w-10 h-10 rounded-full bg-[#f6f6f9] text-[#6b697b] flex items-center justify-center group-hover:bg-[#f0f0f4] transition-colors shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 14h14v-9h-14v16"></path></svg>
                 </div>
-                <h4 class="font-bold text-[#3d3c52] text-[14px]">End Message</h4>
-                <p class="text-[12px] text-[#6b697b] text-center px-8 line-clamp-3">Add a final message to display when users complete this flow.</p>
+                <div class="flex flex-col text-center">
+                  <h4 class="font-bold text-[#3d3c52] text-[14px]">End Message</h4>
+                </div>
               </div>
             </div>
 
           </div>
-        </div>
-
-        <div id="dvm-footer" class="h-[60px] bg-white border-t border-[#e5e7eb] px-6 flex items-center justify-between shrink-0 z-10">
-          <a href="index.html" class="btn-back-to-view h-[46px] flex items-center gap-1.5 px-3 text-[#3d3c52] text-[14px] font-medium hover:bg-gray-50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M15 6l-6 6l6 6"></path></svg> Back to view mode
-          </a>
         </div>
 
       </div>
     </div>
   </div>
 
-  <div id="expanded-step-modal" class="fixed inset-0 z-[1010] hidden bg-black/60 flex items-center justify-center overflow-hidden backdrop-blur-sm transition-opacity">
-    <div class="w-full h-full bg-[#f6f7fa] flex flex-col shadow-2xl relative animate-fade-in-up">
+  <div id="expanded-step-modal" class="fixed inset-0 z-[1010] hidden bg-black/60 flex items-center justify-center overflow-hidden backdrop-blur-sm transition-opacity p-8">
+    <div class="w-[95vw] max-w-[1450px] h-[85vh] bg-[#f6f7fa] flex flex-col shadow-2xl relative animate-fade-in-up rounded-xl overflow-hidden">
       <div class="h-[60px] bg-white border-b border-[#e5e7eb] flex items-center justify-between px-6 shrink-0 shadow-sm z-20">
         <div class="flex items-center gap-4">
           <span id="expanded-modal-step-title" class="font-semibold text-[#1f1f32] text-[16px]">Step 1/4</span>
@@ -494,8 +571,8 @@
         </button>
       </div>
 
-      <div class="flex-1 flex overflow-hidden">
-        <div class="flex-1 bg-[#eef1f6] p-8 flex items-center justify-center overflow-auto relative">
+      <div class="flex-1 flex overflow-hidden bg-white">
+        <div class="w-[70%] bg-[#eef1f6] p-8 flex items-center justify-center overflow-auto relative">
           <div id="modal-screenshot-container" class="relative shadow-xl border border-gray-300 rounded-md overflow-hidden bg-white w-[800px] h-[600px] bg-[url('https://whatfix.com/image/ef2e4670-0443-11ec-ad2c-2a8342861064/bacfd0fb-07ec-4584-ad9b-edcea7d35fc5/1/1771604659546/full.png')] bg-cover bg-left-top">
             <div class="dummy-sf-element" style="top: 10px; left: 10px; width: 44px; height: 44px;" onclick="handleDummyElementClick(event, this)"></div>
             <div class="dummy-sf-element" style="top: 10px; left: 250px; width: 350px; height: 40px;" onclick="handleDummyElementClick(event, this)"></div>
@@ -520,20 +597,22 @@
           </div>
         </div>
 
-        <div class="w-[420px] bg-white border-l border-[#e5e7eb] flex flex-col shrink-0 shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-10">
-          <div class="p-4 border-b border-[#e5e7eb] flex gap-2">
-            <button onclick="startModalReselect()" class="flex-1 h-[40px] flex items-center justify-center gap-1.5 border border-[#d7d6d1] rounded bg-white text-[#3d3c52] text-[13px] font-semibold hover:bg-gray-50 transition-colors">
+        <div class="w-[30%] bg-white border-l border-[#e5e7eb] flex flex-col shrink-0 shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-10">
+          <div class="p-4 border-b border-[#e5e7eb] flex">
+            <button onclick="startModalReselect()" class="flex-1 h-[40px] flex items-center justify-center gap-1.5 border border-[#d7d6d1] rounded-l-[4px] bg-white text-[#3d3c52] text-[13px] font-semibold hover:bg-gray-50 transition-colors focus:z-10 relative">
               <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5"></path></svg> Reselect Element
             </button>
-            <button class="flex-1 h-[40px] flex items-center justify-center gap-1.5 border border-[#d7d6d1] rounded bg-white text-[#3d3c52] text-[13px] font-semibold hover:bg-gray-50 transition-colors">
+            <button class="flex-1 h-[40px] flex items-center justify-center gap-1.5 border border-[#d7d6d1] border-l-0 rounded-r-[4px] bg-white text-[#3d3c52] text-[13px] font-semibold hover:bg-gray-50 transition-colors focus:z-10 relative">
               <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="2" y1="12" x2="4" y2="12"></line></svg> Element Precision
             </button>
           </div>
-          <div class="flex border-b border-[#e5e7eb] px-4 h-[48px]">
-            <button class="h-full flex-1 flex items-center justify-center font-semibold text-[#0975d7] border-b-2 border-[#0975d7]">Configurations</button>
-            <button class="h-full flex-1 flex items-center justify-center font-medium text-[#6b697b] hover:text-[#1f1f32]">Visibility Rules</button>
-            <button class="h-full flex-1 flex items-center justify-center font-medium text-[#6b697b] hover:text-[#1f1f32]">CSS</button>
+          
+          <div class="flex border-b border-[#e5e7eb] h-[48px] w-full px-4 justify-start">
+            <button class="h-full flex-1 flex items-center justify-center font-bold text-[#d13B1A] border-b-2 border-[#d13B1A]">Configurations</button>
+            <button class="h-full flex-1 flex items-center justify-center font-bold text-[#d13B1A] hover:opacity-80 transition-opacity">Visibility Rules</button>
+            <button class="h-full flex-1 flex items-center justify-center font-bold text-[#d13B1A] hover:opacity-80 transition-opacity">CSS</button>
           </div>
+
           <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
             <div class="border border-[#e5e7eb] rounded-lg bg-white overflow-hidden">
               <div class="h-[48px] px-4 flex items-center justify-between bg-gray-50/50 border-b border-[#e5e7eb] cursor-pointer">
@@ -565,12 +644,14 @@
               </div>
             </div>
           </div>
-          <div class="p-4 border-t border-[#e5e7eb] bg-white shrink-0 flex items-center justify-between">
-            <button class="box-border h-[44px] px-[15px] py-[11px] border border-[#dfdde7] bg-white text-[#3d3c52] text-[14px] font-medium leading-[20px] rounded-[4px] hover:bg-[#f6f6f9] transition-colors">Discard</button>
-            <button class="box-border h-[44px] px-[16px] py-[12px] border-none bg-[#c74900] text-white text-[14px] font-medium leading-[20px] rounded-[4px] hover:bg-[#9e4100] transition-colors">Save</button>
-          </div>
         </div>
       </div>
+      
+      <div class="p-4 border-t border-[#e5e7eb] bg-white shrink-0 flex items-center justify-end gap-3 z-20">
+        <button onclick="closeExpandedModal()" class="box-border h-[44px] px-[15px] py-[11px] border border-[#dfdde7] bg-white text-[#3d3c52] text-[14px] font-semibold leading-[20px] rounded-[4px] hover:bg-[#f6f6f9] transition-colors">Discard</button>
+        <button onclick="closeExpandedModal()" class="box-border h-[44px] px-[16px] py-[12px] border-none bg-[#c74900] text-white text-[14px] font-semibold leading-[20px] rounded-[4px] hover:bg-[#9e4100] transition-colors">Save</button>
+      </div>
+
     </div>
   </div>
 
@@ -677,8 +758,72 @@
     // Context variables
     let targetStepCardElement = null;
     let stepToDelete = null;
+    let currentExpandedStep = null;
+    let returnToStepModal = false;
 
-    // Split Dropdown Toggle (if present anywhere else)
+    // View Engine Logic (Grid vs List)
+    function setViewMode(mode) {
+      const container = document.getElementById('dvm-grid-container');
+      const toolbar = document.getElementById('dvm-toolbar');
+      const btnGrid = document.getElementById('btn-view-grid');
+      const btnList = document.getElementById('btn-view-list');
+      const collapseToggle = document.getElementById('btn-toggle-collapse');
+
+      if (mode === 'list') {
+        container.classList.remove('view-mode-grid');
+        container.classList.add('view-mode-list');
+        toolbar.classList.remove('max-w-[1200px]');
+        toolbar.classList.add('max-w-[620px]');
+        
+        btnList.classList.add('bg-blue-50', 'text-[#0975d7]');
+        btnList.classList.remove('text-[#6b697b]', 'bg-transparent');
+        btnGrid.classList.remove('bg-blue-50', 'text-[#0975d7]');
+        btnGrid.classList.add('text-[#6b697b]', 'bg-transparent');
+        
+        collapseToggle.classList.remove('hidden');
+        collapseToggle.classList.add('flex');
+      } else {
+        container.classList.remove('view-mode-list');
+        container.classList.add('view-mode-grid');
+        toolbar.classList.remove('max-w-[620px]');
+        toolbar.classList.add('max-w-[1200px]');
+        
+        btnGrid.classList.add('bg-blue-50', 'text-[#0975d7]');
+        btnGrid.classList.remove('text-[#6b697b]', 'bg-transparent');
+        btnList.classList.remove('bg-blue-50', 'text-[#0975d7]');
+        btnList.classList.add('text-[#6b697b]', 'bg-transparent');
+        
+        collapseToggle.classList.add('hidden');
+        collapseToggle.classList.remove('flex');
+      }
+    }
+
+    // List Expansion Logic
+    let isAllCollapsed = false;
+    function toggleCollapseAll() {
+      isAllCollapsed = !isAllCollapsed;
+      const cards = document.querySelectorAll('.step-card-wrapper');
+      const collapseText = document.getElementById('collapse-text');
+      const collapseIcon = document.getElementById('collapse-icon-path');
+
+      if (isAllCollapsed) {
+        cards.forEach(card => card.classList.add('collapsed'));
+        collapseText.innerText = "Expand all";
+        collapseIcon.setAttribute('d', "M6 9l6 6l6 -6"); // Chevron down
+      } else {
+        cards.forEach(card => card.classList.remove('collapsed'));
+        collapseText.innerText = "Collapse all";
+        collapseIcon.setAttribute('d', "M6 15l6 -6l6 6"); // Chevron up
+      }
+    }
+
+    function toggleCardCollapse(event, btn) {
+      event.stopPropagation();
+      const card = btn.closest('.step-card-wrapper');
+      card.classList.toggle('collapsed');
+    }
+
+    // Dropdown Toggles
     function toggleSplitDropdown(event, buttonElement) {
       event.stopPropagation();
       closeAllMenus();
@@ -688,11 +833,10 @@
       }
     }
 
-    // Toggle the dropdown on the inline plus buttons
     function toggleAddStepDropdown(event, buttonElement) {
       event.stopPropagation();
       closeAllMenus();
-      targetStepCardElement = buttonElement.closest('.step-card-item');
+      targetStepCardElement = buttonElement.closest('.step-card-wrapper');
       
       const menu = buttonElement.nextElementSibling;
       if (menu && menu.classList.contains('add-step-dropdown')) {
@@ -700,11 +844,10 @@
       }
     }
 
-    // NEW: Toggle the dropdown on the Branch icons
     function toggleBranchDropdown(event, buttonElement) {
       event.stopPropagation();
       closeAllMenus();
-      targetStepCardElement = buttonElement.closest('.step-card-item');
+      targetStepCardElement = buttonElement.closest('.step-card-wrapper');
       
       const menu = buttonElement.nextElementSibling;
       if (menu && menu.classList.contains('branch-dropdown')) {
@@ -724,7 +867,7 @@
     function deleteStep(event, btnElement) {
       event.stopPropagation();
       closeAllMenus();
-      stepToDelete = btnElement.closest('.step-card-item');
+      stepToDelete = btnElement.closest('.step-card-wrapper');
       document.getElementById('modal-delete-confirm').classList.remove('hidden');
     }
 
@@ -760,6 +903,10 @@
 
     function closeLaunchLiveEditModal() {
       document.getElementById('modal-launch-edit').classList.add('hidden');
+      if (returnToStepModal && currentExpandedStep !== null) {
+        openExpandedModal(currentExpandedStep);
+        returnToStepModal = false;
+      }
     }
 
     function openImportModal() {
@@ -773,7 +920,6 @@
       document.getElementById('btn-execute-import').disabled = true;
     }
 
-    // Handle selecting a flow in the import modal
     function selectFlow(listItem) {
       document.querySelectorAll('.import-flow-item').forEach(el => el.classList.remove('bg-blue-50'));
       listItem.classList.add('bg-blue-50');
@@ -796,34 +942,40 @@
 
       renumberAllSteps();
 
-      injectedElement1.classList.add('animate-import-glow');
-      injectedElement2.classList.add('animate-import-glow');
+      injectedElement1.querySelector('.step-card-inner').classList.add('animate-import-glow');
+      injectedElement2.querySelector('.step-card-inner').classList.add('animate-import-glow');
 
       setTimeout(() => {
-        injectedElement1.classList.remove('animate-import-glow');
-        injectedElement2.classList.remove('animate-import-glow');
+        injectedElement1.querySelector('.step-card-inner').classList.remove('animate-import-glow');
+        injectedElement2.querySelector('.step-card-inner').classList.remove('animate-import-glow');
       }, 2500);
     }
 
-    // Utility: Generate the full Step Card HTML for injection
     function createDummyStepHTML(title) {
       return `
-        <div class="relative w-[368px] h-[322px] group/step step-card-item">
-          <div onclick="openExpandedModal(99)" class="w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target">
-            <div class="card-header h-[48px] px-3 flex items-center gap-2 bg-white border-b border-[#f2f2f8] rounded-t-lg" onclick="event.stopPropagation()">
-              <svg class="icon icon-tabler icon-tabler-grip-vertical text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
-              <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full">-</span>
-              <span class="font-bold text-[#3d3c52] text-[13px] truncate">${title}</span>
+        <div class="relative group/step step-card-wrapper">
+          <div onclick="openExpandedModal(99)" class="step-card-inner w-full h-full bg-white border border-[#e5e7eb] rounded-lg shadow-sm flex flex-col hover:border-[#d7d6d1] transition-colors cursor-pointer glow-target overflow-hidden">
+            <div class="card-header h-[48px] px-3 flex items-center justify-between bg-white border-b border-[#f2f2f8]" onclick="event.stopPropagation()">
+              <div class="flex items-center gap-2">
+                <svg class="text-[#d7d6d1]" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                <span class="step-number-badge w-[20px] h-[20px] flex items-center justify-center bg-[#f6f6f9] text-[#3d3c52] text-[11px] font-semibold rounded-full border border-[#dfdde7]">-</span>
+                <span class="font-bold text-[#3d3c52] text-[13px] truncate">${title}</span>
+              </div>
+              <div class="list-collapse-toggle items-center">
+                <button class="p-1.5 text-[#6b697b] hover:bg-gray-100 rounded transition-colors" onclick="toggleCardCollapse(event, this)">
+                  <svg class="icon-chevron transition-transform duration-200" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 15l-6 -6l-6 6"></path></svg>
+                </button>
+              </div>
             </div>
-            <div class="card-preview flex-1 bg-[#f9fafb] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
+            <div class="card-preview collapsible-section flex-1 bg-[#fcfcfd] p-4 flex items-center justify-center border-b border-[#f2f2f8]">
               <div class="w-full h-full bg-white border border-[#e5e7eb] shadow-sm rounded flex items-center justify-center text-[#d7d6d1] text-xs font-medium">[Imported Step]</div>
             </div>
-            <div class="card-footer h-[48px] px-3 flex items-center justify-between bg-white rounded-b-lg" onclick="event.stopPropagation()">
+            <div class="card-footer collapsible-section h-[48px] px-3 flex items-center justify-between bg-white" onclick="event.stopPropagation()">
               <span class="text-[12px] text-[#6b697b]">On click of selected element</span>
               <div class="flex gap-1.5 text-[#6b697b]">
                 <div class="relative flex items-center justify-center">
                   <button class="p-1 hover:bg-gray-50 rounded transition-colors" onclick="toggleBranchDropdown(event, this)">
-                    <svg class="icon icon-tabler icon-tabler-git-branch" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="7" cy="18" r="2"></circle><circle cx="7" cy="6" r="2"></circle><circle cx="17" cy="6" r="2"></circle><line x1="7" y1="8" x2="7" y2="16"></line><path d="M9 18h6a2 2 0 0 0 2 -2v-5"></path><polyline points="14 14 17 11 20 14"></polyline></svg>
                   </button>
                   <ul class="branch-dropdown hidden absolute top-[calc(100%+4px)] right-0 w-[180px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
                     <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
@@ -835,16 +987,16 @@
                   </ul>
                 </div>
                 <button class="p-1 hover:bg-red-50 hover:text-red-600 rounded transition-colors" onclick="deleteStep(event, this)" title="Delete Step">
-                  <svg class="icon icon-tabler icon-tabler-trash" width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg>
                 </button>
               </div>
             </div>
           </div>
-          <div class="absolute left-[380px] top-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-            <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative">
+          <div class="plus-btn-wrapper">
+            <button onclick="toggleAddStepDropdown(event, this)" class="w-6 h-6 bg-[#f0f0f4] text-[#a1a0ab] rounded-full flex items-center justify-center hover:bg-blue-50 hover:text-[#0975d7] transition-colors relative shadow-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
-            <ul class="add-step-dropdown hidden absolute top-[calc(100%+8px)] left-[12px] w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
+            <ul class="add-step-dropdown hidden absolute w-[160px] bg-white shadow-lg border border-[#e5e7eb] rounded-[6px] py-1.5 flex flex-col z-50">
               <li onclick="handleDropdownAdd(this)" class="w-full text-left px-3 py-2 text-[13px] text-[#3d3c52] hover:bg-[#f9fafb] cursor-pointer transition-colors font-medium flex items-center gap-2">
                 <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add steps
               </li>
@@ -857,9 +1009,8 @@
       `;
     }
 
-    // Utility: Update all step numbers natively via DOM order
     function renumberAllSteps() {
-      const allStepCards = document.querySelectorAll('.step-card-item');
+      const allStepCards = document.querySelectorAll('.step-card-wrapper');
       allStepCards.forEach((card, index) => {
         const badge = card.querySelector('.step-number-badge');
         if (badge) badge.innerText = index + 1;
@@ -869,6 +1020,7 @@
 
     // --- EXPANDED STEP MODAL CONTROLS ---
     function openExpandedModal(stepNum = 1) {
+      currentExpandedStep = stepNum;
       const modal = document.getElementById('expanded-step-modal');
       document.getElementById('expanded-modal-step-title').innerText = `Step ${stepNum}/4`;
       document.getElementById('expanded-modal-tooltip-title').innerText = `${stepNum}/4`;
@@ -886,8 +1038,9 @@
     let isModalReselectActive = false;
 
     function startModalReselect() {
-      isModalReselectActive = true;
-      document.getElementById('modal-screenshot-container').classList.add('reselect-mode');
+      returnToStepModal = true;
+      closeExpandedModal();
+      document.getElementById('modal-launch-edit').classList.remove('hidden');
     }
 
     function handleDummyElementClick(event, elem) {
