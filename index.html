@@ -5,36 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Whatfix Guidance System Prototype</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      /* Minimal variables required for table and checkbox styling */
+      --color-primary-50: #fff8f5;
+      --color-info-50: #f0f9ff;
+      --checkbox-color-background-checked-default: #0975d7;
+      --checkbox-color-border-checked-default: #0975d7;
+      --checkbox-color-background-unchecked-default: #ffffff;
+      --checkbox-color-border-unchecked-hover: #7b7891;
+      --checkbox-color-background-unchecked-hover: #ffffff;
+      --checkbox-color-background-checked-hover: #0d59ab;
+      --checkbox-color-border-checked-hover: #0d59ab;
+      --checkbox-unchecked-focus-visible-outline: 2px solid #0975d7;
+      --border-radius-radius-small: 4px;
+    }
+
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
     body.picker-on #target-sandbox * { cursor: crosshair !important; }
+    
+    /* -----------------------------------------------------------------
+       WIRING UP THE CSS VARIABLES TO THE CHECKBOX & ROWS
+       ----------------------------------------------------------------- */
+
+    .custom-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #CFD0D1;
+      border-radius: var(--border-radius-radius-small, 4px);
+      background-color: var(--checkbox-color-background-unchecked-default, #fff);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    /* Checkbox Hover */
+    .custom-checkbox:hover {
+      border-color: var(--checkbox-color-border-unchecked-hover, #7b7891);
+      background-color: var(--checkbox-color-background-unchecked-hover, #fff);
+    }
+
+    /* Checkbox Focus */
+    .custom-checkbox:focus-visible {
+      outline: var(--checkbox-unchecked-focus-visible-outline, 2px solid #0975d7);
+      outline-offset: 2px;
+    }
+
+    /* Checkbox Checked */
+    .custom-checkbox:checked {
+      background-color: var(--checkbox-color-background-checked-default, #0975d7);
+      border-color: var(--checkbox-color-border-checked-default, #0975d7);
+    }
+
+    /* Checkbox Checked + Hover */
+    .custom-checkbox:checked:hover {
+      background-color: var(--checkbox-color-background-checked-hover, #0d59ab);
+      border-color: var(--checkbox-color-border-checked-hover, #0d59ab);
+    }
+
+    /* Checkmark Icon */
+    .custom-checkbox:checked::after {
+      content: '';
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+    }
+
+    /* Table Row Alternating Colors & Hover Mapping */
+    .table-row {
+      transition: background-color 0.15s ease;
+    }
+    .table-row:nth-child(odd) {
+      background-color: #FFFFFF;
+    }
+    .table-row:nth-child(even) {
+      background-color: #FCFCFC;
+    }
+    .table-row:hover {
+      background-color: var(--color-info-50, #f0f9ff) !important;
+    }
   </style>
 </head>
 <body class="bg-[#f6f7fa] font-['Inter'] text-[14px] antialiased text-[#1F1F32] overflow-hidden select-none">
 
-  <!-- WHATFIX HUB LAYOUT -->
   <div id="wfx-hub-layout" class="flex h-screen w-full overflow-hidden transition-opacity duration-150">
     
-    <!-- SIDEBAR: HUB SHARED NAVIGATION -->
     <div id="dash-sidebar" class="w-[260px] bg-[#1a1a2e] text-white flex flex-col shrink-0 relative border-r border-white/5 shadow-xl z-20">
       
-      <!-- PRODUCT SWITCHER HEADER -->
       <div class="dash-header-switcher mx-3 px-2 h-[60px] mt-2 flex items-center justify-center cursor-pointer hover:bg-white/5 rounded-lg transition-colors">
         <div class="switcher-inner-a w-full h-[44px] flex items-center">
-          <!-- Guidance Icon -->
           <div class="switcher-logo-x w-[44px] h-[44px] flex items-center justify-center shrink-0">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="16.9705" height="5.65685" transform="matrix(-0.707107 0.707107 0.707107 0.707107 19.9999 8.00003)" fill="#F55800"></rect><rect width="16.9705" height="5.65685" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 23.9999 12)" fill="#F55800"></rect><path fill-rule="evenodd" clip-rule="evenodd" d="M16 12L20 16L23.9999 12L19.9999 8.00003L16 12Z" fill="#C63D22"></path><rect x="3.99994" y="8" width="16.9705" height="5.65685" transform="rotate(45 3.99994 8)" fill="#FBA450"></rect><rect x="-6.10352e-05" y="12" width="16.9705" height="5.65685" transform="rotate(-45 -6.10352e-05 12)" fill="#FBA450"></rect><path fill-rule="evenodd" clip-rule="evenodd" d="M3.99994 7.99998L7.99993 12L3.99994 16L-5.6489e-05 12L3.99994 7.99998Z" fill="#FA8A1F"></path></svg>
           </div>
           <div class="switcher-text-y flex-1 h-[44px] flex items-center justify-between pl-1">
             <h5 class="h-[24px] leading-[24px] font-semibold text-[16px] text-white tracking-wide">Guidance</h5>
-            <!-- PK Dashboard Switch.svg -->
             <div class="switcher-icon-wrapper w-[44px] h-[44px] flex items-center justify-center shrink-0">
-              <svg class="icon icon-tabler icon-tabler-selector" width="16" height="16" viewBox="0 0 24 24" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><polyline points="8 9 12 5 16 9" stroke="#FFFFFF" fill="none" stroke-width="2px"></polyline><polyline points="16 15 12 19 8 15" stroke="#FFFFFF" fill="none" stroke-width="2px"></polyline></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-grid-dots" width="20" height="20" viewBox="0 0 24 24" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="19" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle></svg>
             </div>
           </div>
         </div>
@@ -42,27 +121,23 @@
 
       <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 my-1"></div>
 
-      <!-- PRIMARY NAV AREA -->
       <div class="dash-nav-container w-full px-3 py-2 flex flex-col flex-1 min-h-0 overflow-y-auto custom-scrollbar">
         
-        <!-- Account Switcher / PK Product Switcher.svg -->
         <div class="dash-account-switch w-full h-[44px] flex items-center justify-center mb-1">
-          <button class="w-full h-[44px] flex items-center rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+          <button class="w-full h-[44px] flex items-center rounded-lg hover:bg-white/10 transition-colors">
             <div class="w-full h-[24px] flex items-center">
               <div class="dash-nav-icon w-[44px] h-[24px] flex items-center justify-center shrink-0">
-                <svg class="icon icon-tabler icon-tabler-grid-dots" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="5" cy="5" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="12" cy="5" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="19" cy="5" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="5" cy="12" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="12" cy="12" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="19" cy="12" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="5" cy="19" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="12" cy="19" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle><circle cx="19" cy="19" r="1" stroke="#FFFFFF" fill="none" stroke-width="2px"></circle></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5.84079 13.7059C5.79926 13.4177 5.77778 13.1231 5.77778 12.8235C5.77778 10.3597 7.23116 8.23273 9.33333 7.24144M8.79326 18.1176C9.72974 18.6778 10.827 19 12 19C13.173 19 14.2703 18.6778 15.2067 18.1176M18.1592 13.7059C18.2007 13.4177 18.2222 13.1231 18.2222 12.8235C18.2222 10.3597 16.7688 8.23273 14.6667 7.24144M14.6667 6.64706C14.6667 8.10899 13.4728 9.29412 12 9.29412C10.5272 9.29412 9.33333 8.10899 9.33333 6.64706C9.33333 5.18513 10.5272 4 12 4C13.4728 4 14.6667 5.18513 14.6667 6.64706ZM9.33333 16.3529C9.33333 17.8149 8.13943 19 6.66667 19C5.19391 19 4 17.8149 4 16.3529C4 14.891 5.19391 13.7059 6.66667 13.7059C8.13943 13.7059 9.33333 14.891 9.33333 16.3529ZM20 16.3529C20 17.8149 18.8061 19 17.3333 19C15.8606 19 14.6667 17.8149 14.6667 16.3529C14.6667 14.891 15.8606 13.7059 17.3333 13.7059C18.8061 13.7059 20 14.891 20 16.3529Z" stroke="#DFDDE7" stroke-width="2"></path></svg>
               </div>
               <div class="flex-1 flex items-center justify-between pr-3">
                 <span class="dash-nav-text font-medium text-[14px] text-white truncate">Aravind_Demo</span>
-                <!-- PK Create Content button icon.svg styled as small text chevron -->
-                <span class="text-white text-xs shrink-0">▼</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-selector" width="16" height="16" viewBox="0 0 24 24" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="8 9 12 5 16 9"></polyline><polyline points="16 15 12 19 8 15"></polyline></svg>
               </div>
             </div>
           </button>
         </div>
 
         <div class="dash-nav-primary space-y-0.5">
-          <!-- Content Button (Selected) -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" onclick="changeView('view-dashboard')" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg bg-white/10 text-white font-medium transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -74,7 +149,6 @@
             </a>
           </div>
           
-          <!-- Widget Button -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -86,7 +160,6 @@
             </a>
           </div>
           
-          <!-- Guidance Analytics Button -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -98,7 +171,6 @@
             </a>
           </div>
 
-          <!-- Style Button -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -110,7 +182,6 @@
             </a>
           </div>
 
-          <!-- Tags Button -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -122,7 +193,6 @@
             </a>
           </div>
 
-          <!-- Settings Button -->
           <div class="w-full h-[44px] flex items-center justify-center">
             <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
               <div class="w-full h-[24px] flex items-center">
@@ -138,9 +208,7 @@
 
       <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 my-1"></div>
 
-      <!-- SECONDARY NAV AREA -->
       <div class="dash-nav-secondary w-full px-3 py-2 flex flex-col shrink-0 space-y-0.5">
-        <!-- Profile Button -->
         <div class="w-full h-[44px] flex items-center justify-center">
           <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
             <div class="w-full h-[24px] flex items-center">
@@ -152,7 +220,6 @@
           </a>
         </div>
 
-        <!-- Notifications Non-Empty Button -->
         <div class="w-full h-[44px] flex items-center justify-center">
           <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
             <div class="w-full h-[24px] flex items-center">
@@ -164,7 +231,6 @@
           </a>
         </div>
 
-        <!-- Resources Button -->
         <div class="w-full h-[44px] flex items-center justify-center">
           <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
             <div class="w-full h-[24px] flex items-center">
@@ -176,7 +242,6 @@
           </a>
         </div>
 
-        <!-- Chat Button -->
         <div class="w-full h-[44px] flex items-center justify-center">
           <a href="#" class="dash-nav-btn w-full h-[44px] flex items-center rounded-lg text-white font-medium hover:bg-white/5 transition-colors">
             <div class="w-full h-[24px] flex items-center">
@@ -191,7 +256,6 @@
 
       <div class="dash-divider h-px bg-white/10 mx-3 shrink-0 mb-4 mt-2"></div>
 
-      <!-- FOOTER LOGO -->
       <div class="dash-footer flex justify-center pb-6 shrink-0">
         <a href="https://whatfix.com" target="_blank" class="opacity-80 hover:opacity-100 transition-opacity block w-[86px] h-[44px]">
           <svg width="86" height="44" viewBox="0 0 86 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.3816 11.5969L18.0031 26.1908H17.8923L17.2 20.1538L13.877 27.5385L14.117 29.3846H20.8462L28.8216 11.5969H24.3816Z" fill="#F05B22"></path><path d="M16.6094 11.597L10.2309 26.1909H10.1202L9.42786 20.154H5.09863L6.33556 29.3847H13.0925L13.8771 27.6401L12.8709 20.154H17.2002L21.0494 11.5693L16.6094 11.597Z" fill="#F8A352"></path><path d="M17.2001 20.1538H12.8708L13.877 27.6123L17.2001 20.2277V20.1538Z" fill="#C43F27"></path><path d="M32.1448 20.1538L29.4587 26.1815H29.3572L28.8033 20.1538H26.4587L23.8279 26.1815H23.7264L23.071 20.1538H20.6433L21.8987 29.3846H24.4464L26.9848 23.7261L27.5387 29.3846H30.2248L34.6279 20.1538H32.1448Z" fill="#FFFFFF"></path><path d="M40.2308 19.9786C39.7113 19.9639 39.1948 20.062 38.7168 20.2659C38.2387 20.4699 37.8105 20.7749 37.4616 21.1601L38.3201 16.4062H35.8278L33.5293 29.3847H36.0124L36.9354 24.0586C36.9909 23.4898 37.2579 22.9627 37.6836 22.5815C38.1093 22.2003 38.6625 21.9928 39.2339 22.0001C40.3508 22.0001 40.6462 22.6832 40.6462 23.4678C40.6327 23.8373 40.5863 24.2049 40.5078 24.5662L39.6493 29.3847H42.077L43.0001 24.5109C43.1156 23.9359 43.1835 23.3524 43.2031 22.7662C43.2248 22.3784 43.1612 21.9905 43.0168 21.6299C42.8725 21.2692 42.6508 20.9446 42.3675 20.6789C42.0841 20.4131 41.746 20.2127 41.3768 20.0917C41.0077 19.9707 40.6165 19.9321 40.2308 19.9786Z" fill="#FFFFFF"></path><path d="M51.64 21.5384C51.3171 21.0177 50.8565 20.5965 50.3092 20.3212C49.7618 20.0459 49.149 19.9272 48.5385 19.9784C47.869 19.9598 47.2028 20.0797 46.5818 20.3306C45.9608 20.5814 45.3982 20.9578 44.9294 21.4361C44.4606 21.9145 44.0956 22.4845 43.8574 23.1104C43.6191 23.7364 43.5126 24.4048 43.5446 25.0738C43.5446 27.6861 45.1692 29.5323 47.7539 29.5323C48.2519 29.5669 48.7513 29.4887 49.2149 29.3032C49.6784 29.1178 50.0941 28.8301 50.4308 28.4615L50.2646 29.3384H52.48L52.8031 27.363L54.0769 20.1538H51.88L51.64 21.5384ZM48.3169 27.6123C47.9838 27.6252 47.6519 27.5658 47.3439 27.4382C47.036 27.3106 46.7593 27.1178 46.533 26.8731C46.3067 26.6283 46.1361 26.3375 46.0329 26.0205C45.9297 25.7035 45.8965 25.3679 45.9354 25.0369C45.9354 23.5046 46.7846 21.9076 48.7046 21.9076C49.039 21.8913 49.3729 21.9474 49.6835 22.0719C49.9942 22.1965 50.2744 22.3866 50.5048 22.6294C50.7353 22.8721 50.9107 23.1617 51.019 23.4784C51.1273 23.7952 51.1659 24.1315 51.1323 24.4646C51.1638 24.8582 51.115 25.254 50.9889 25.6282C50.8628 26.0024 50.662 26.3471 50.3988 26.6414C50.1356 26.9357 49.8153 27.1735 49.4575 27.3404C49.0996 27.5073 48.7116 27.5998 48.3169 27.6123Z" fill="#FFFFFF"></path><path d="M57.114 26.5046L57.9078 22H60.2894L60.594 20.1539H58.2125L58.6925 17.5046H56.6617L55.794 20.1539H54.5017L54.1602 22H55.4617L54.714 26.2462C54.3909 28.0923 54.6586 29.5693 56.9663 29.5693C57.658 29.611 58.3493 29.481 58.9786 29.1908L59.2832 27.4369C58.8454 27.5881 58.3888 27.6782 57.9263 27.7046C57.1602 27.6677 56.9848 27.2154 57.114 26.5046Z" fill="#FFFFFF"></path><path d="M69.9539 18.9168C70.2209 18.9168 70.4818 18.8375 70.7036 18.689C70.9254 18.5405 71.0982 18.3295 71.1999 18.0827C71.3016 17.8359 71.3278 17.5645 71.275 17.3028C71.2223 17.0411 71.093 16.801 70.9036 16.6129C70.7142 16.4248 70.4732 16.2972 70.2111 16.2462C69.9491 16.1953 69.6778 16.2233 69.4318 16.3267C69.1857 16.4301 68.9758 16.6043 68.8289 16.8271C68.6819 17.05 68.6044 17.3114 68.6062 17.5784C68.6087 17.9342 68.7517 18.2746 69.0042 18.5254C69.2567 18.7761 69.5981 18.9168 69.9539 18.9168Z" fill="#FFFFFF"></path><path d="M67.5816 20.1538L67.2493 22H68.3478L67.0463 29.3846H69.4832L71.117 20.1538H67.5816Z" fill="#FFFFFF"></path><path d="M80.9017 20.1538H78.0032L75.8802 22.9877L74.4678 20.1538H71.8278L74.2371 24.5938L70.1755 29.3846H73.0925L75.354 26.3938L76.8217 29.3846H79.4155L77.0248 24.7692L80.9017 20.1538Z" fill="#FFFFFF"></path><path d="M65.5047 19.2307C65.6247 18.5569 65.7355 18.0584 66.6401 18.0584C66.8936 18.0627 67.1465 18.0843 67.397 18.123L67.6924 16.4615C67.2126 16.3398 66.7197 16.2778 66.2247 16.2769C63.9355 16.2769 63.317 17.9569 63.0493 19.3969L62.9109 20.2092H61.397L61.1478 22.0553H62.5693L61.277 29.5415C61.2638 29.8172 61.1489 30.0782 60.9546 30.2742C60.7603 30.4702 60.5003 30.5874 60.2247 30.603L59.8832 32.4492C62.6524 32.6061 63.3263 31.5261 63.6678 29.5876L65.0155 21.9999H66.7047L67.0001 20.1538H65.3386L65.5047 19.2307Z" fill="#FFFFFF"></path></svg>
@@ -199,7 +263,6 @@
       </div>
     </div>
 
-    <!-- MAIN RIGHT VIEW AREA (DASHBOARD ONLY) -->
     <div class="flex-1 relative bg-white">
       <div id="view-dashboard" class="absolute inset-0 flex flex-col min-w-0 bg-white z-10 transition-opacity duration-150">
         
@@ -207,7 +270,10 @@
           <div class="dash-title-container flex items-center gap-4">
             <h1 class="text-[24px] font-bold text-[#1F1F32]">Content</h1>
           </div>
-          <button class="dash-top-actions h-[44px] px-[16px] bg-[#d45f00] text-white font-semibold rounded-[6px] hover:bg-[#b85200]">Create Content ▾</button>
+          <button class="dash-top-actions h-[44px] px-[16px] bg-[#d45f00] text-white text-[14px] font-medium rounded-[6px] hover:bg-[#b85200] flex items-center gap-1">
+            Create Content
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down" width="20" height="20" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
         </header>
 
         <div class="dash-toolbar px-[25px] border-b border-[#eef1f6] flex items-center justify-between shrink-0">
@@ -218,25 +284,20 @@
           </div>
           
           <div class="toolbar-right flex items-center gap-2 py-2">
-            <!-- PK Create Folder Icon.svg -->
             <button class="btn-create-folder h-[44px] flex items-center gap-1 text-[#0975d7] font-medium px-[8px] hover:bg-blue-50 rounded transition-colors">
               <svg class="icon icon-tabler icon-tabler-folder-plus" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" stroke="#0975D7" fill="none" stroke-width="2px"></path><line x1="12" y1="10" x2="12" y2="16" stroke="#0975D7" fill="none" stroke-width="2px"></line><line x1="9" y1="13" x2="15" y2="13" stroke="#0975D7" fill="none" stroke-width="2px"></line></svg> Create Folder
             </button>
-            <!-- PK Search bar Search icon.svg -->
             <div class="dash-search-box w-[265px] h-[44px] border border-[#d7d6d1] rounded-[4px] flex items-center gap-2 px-[12px] bg-white">
               <svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="10" cy="10" r="7" stroke="#3D3C52" fill="none" stroke-width="2px"></circle><line x1="21" y1="21" x2="15" y2="15" stroke="#3D3C52" fill="none" stroke-width="2px"></line></svg>
               <input type="text" placeholder="Search content" class="outline-none bg-transparent w-full">
             </div>
             <div class="dash-toolbar-actions flex gap-2">
-              <!-- PK Filter button icon.svg -->
               <button class="btn-filter w-[90px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center gap-1 text-[#3d3c52] hover:bg-gray-50 transition-colors font-medium">
                 <svg class="icon icon-tabler icon-tabler-adjustments-horizontal" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="14" cy="6" r="2" stroke="#3D3C52" fill="none" stroke-width="2px"></circle><line x1="4" y1="6" x2="12" y2="6" stroke="#3D3C52" fill="none" stroke-width="2px"></line><line x1="16" y1="6" x2="20" y2="6" stroke="#3D3C52" fill="none" stroke-width="2px"></line><circle cx="8" cy="12" r="2" stroke="#3D3C52" fill="none" stroke-width="2px"></circle><line x1="4" y1="12" x2="6" y2="12" stroke="#3D3C52" fill="none" stroke-width="2px"></line><line x1="10" y1="12" x2="20" y2="12" stroke="#3D3C52" fill="none" stroke-width="2px"></line><circle cx="17" cy="18" r="2" stroke="#3D3C52" fill="none" stroke-width="2px"></circle><line x1="4" y1="18" x2="15" y2="18" stroke="#3D3C52" fill="none" stroke-width="2px"></line><line x1="19" y1="18" x2="20" y2="18" stroke="#3D3C52" fill="none" stroke-width="2px"></line></svg> Filter
               </button>
-              <!-- PK Export content icon.svg -->
               <button class="btn-export w-[44px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center text-[#3d3c52] hover:bg-gray-50 transition-colors">
                 <svg class="icon icon-tabler icon-tabler-table-export" width="20" height="20" viewBox="0 0 24 24" stroke="#3d3c52" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M11.5 20h-5.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v7.5m-16 -3.5h16m-10 -6v16m4 -1h7m-3 -3l3 3l-3 3" stroke="#3D3C52" fill="none" stroke-width="2px"></path></svg>
               </button>
-              <!-- PK Table settings icon.svg -->
               <button class="btn-settings w-[44px] h-[44px] border border-[#d7d6d1] bg-white rounded-[4px] flex items-center justify-center text-[#3d3c52] hover:bg-gray-50 transition-colors">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M7 20C5.34315 20 4 18.6569 4 17V7C4 5.34315 5.34315 4 7 4H17C18.6569 4 20 5.34315 20 7V17C20 18.6569 18.6569 20 17 20H7ZM11 6H7C6.44772 6 6 6.44772 6 7V17C6 17.5523 6.44772 18 7 18H11V6ZM17 6H13V18H17C17.5523 18 18 17.5523 18 17V7C18 6.44772 17.5523 6 17 6Z" fill="#3D3C52"></path></svg>
               </button>
@@ -244,92 +305,96 @@
           </div>
         </div>
 
-        <div id="dash-table" class="flex-1 overflow-auto custom-scrollbar px-[25px]">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="table-header h-[53px] bg-white border-b border-[#e5e7eb] text-[#6b697b] font-semibold text-[12px] sticky top-0 z-10">
-                <th class="pl-2 w-12"><input type="checkbox" class="rounded"></th>
-                <th class="w-[30%]">
-                  <div class="flex items-center gap-1">Name <svg class="icon icon-tabler icon-tabler-arrows-sort" width="16" height="16" viewBox="0 0 24 24" stroke="#525066" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M3 9l4 -4l4 4m-4 -4v14" stroke="#525066" fill="none" stroke-width="2px"></path><path d="M21 15l-4 4l-4 -4m4 4v-14" stroke="#525066" fill="none" stroke-width="2px"></path></svg></div>
-                </th>
-                <th class="w-[15%]">
-                  <div class="flex items-center gap-1">Last updated on <svg class="icon icon-tabler icon-tabler-sort-descending" width="16" height="16" viewBox="0 0 24 24" stroke="#525066" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><line x1="4" y1="6" x2="13" y2="6" stroke="#525066" fill="none" stroke-width="2px"></line><line x1="4" y1="12" x2="11" y2="12" stroke="#525066" fill="none" stroke-width="2px"></line><line x1="4" y1="18" x2="11" y2="18" stroke="#525066" fill="none" stroke-width="2px"></line><polyline points="15 15 18 18 21 15" stroke="#525066" fill="none" stroke-width="2px"></polyline><line x1="18" y1="6" x2="18" y2="18" stroke="#525066" fill="none" stroke-width="2px"></line></svg></div>
-                </th>
-                <th class="w-[15%]">Type</th>
-                <th class="w-[10%]">Version</th>
-                <th class="w-[30%]">Last updated by</th>
-              </tr>
-            </thead>
-            <tbody class="text-[#374151]">
-              <!-- 10 ROWS GENERATED AS SPECIFIED -->
-              <tr class="table-row h-[48px] hover:bg-[#fff8f5] border-b border-[#f2f2f8] transition-colors group">
-                <td class="pl-2"><input type="checkbox" class="rounded"></td>
-                <td class="font-medium flex items-center justify-between h-[48px]">
-                  <div class="flex items-center gap-2 cursor-pointer hover:underline" onclick="changeView('view-dvm')">
-                    <!-- PK Flow Icon.svg -->
-                    <svg class="icon icon-tabler icon-tabler-directions" width="20" height="20" viewBox="0 0 24 24" stroke="#6B697B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M12 21v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 13v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 5v-2" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M10 21h4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M8 5v4h11l2 -2l-2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M14 13v4h-8l-2 -2l2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg>
-                    <span class="text-[#1f1f32] font-semibold">Test Flow 1</span>
-                  </div>
-                  <div class="row-actions opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-4">
-                    <!-- PK Row See Live icon.svg -->
-                    <button class="p-1" title="Play"><svg class="icon icon-tabler icon-tabler-player-play" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M7 4v16l13 -8z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg></button>
-                    <!-- PK Row edit icon.svg -->
-                    <button onclick="changeView('view-dvm')" class="p-1 text-[#d45f00] hover:bg-orange-100/50 rounded" title="Edit Content">
-                      <svg class="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" stroke="#6B697B" fill="none" stroke-width="2px"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" stroke="#6B697B" fill="none" stroke-width="2px"></line></svg>
-                    </button>
-                    <!-- PK Row ellipsis icon.svg -->
-                    <button class="p-1" title="More"><svg class="icon icon-tabler icon-tabler-dots" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="5" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="12" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="19" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle></svg></button>
-                  </div>
-                </td>
-                <td class="text-[#6b697b]">Jun 08, 2026</td>
-                <td><span class="bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded border border-orange-100 font-medium text-[11px]">Flow</span></td>
-                <td class="text-[#6b697b] font-mono">1</td>
-                <td class="text-[#6b697b]">Aravind Manohar</td>
-              </tr>
+        <div id="dash-table" class="flex-1 overflow-auto custom-scrollbar px-[25px] py-[16px]">
+          <div class="border border-[#181d1f40] rounded-lg overflow-hidden bg-white">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="table-header h-[53px] border-b border-[#e5e7eb] text-[#6b697b] font-medium text-[14px] sticky top-0 z-10 bg-[#f8f8f8]">
+                  <th class="pl-[16px] w-[44px] align-middle">
+                    <div class="flex items-center h-full">
+                      <input type="checkbox" class="custom-checkbox">
+                    </div>
+                  </th>
+                  <th class="w-[30%] align-middle">
+                    <div class="flex items-center gap-1 h-[53px]">Name <svg class="icon icon-tabler icon-tabler-arrows-sort" width="16" height="16" viewBox="0 0 24 24" stroke="#525066" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M3 9l4 -4l4 4m-4 -4v14" stroke="#525066" fill="none" stroke-width="2px"></path><path d="M21 15l-4 4l-4 -4m4 4v-14" stroke="#525066" fill="none" stroke-width="2px"></path></svg></div>
+                  </th>
+                  <th class="w-[15%] align-middle">
+                    <div class="flex items-center gap-1 h-[53px]">Last updated on <svg class="icon icon-tabler icon-tabler-sort-descending" width="16" height="16" viewBox="0 0 24 24" stroke="#525066" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><line x1="4" y1="6" x2="13" y2="6" stroke="#525066" fill="none" stroke-width="2px"></line><line x1="4" y1="12" x2="11" y2="12" stroke="#525066" fill="none" stroke-width="2px"></line><line x1="4" y1="18" x2="11" y2="18" stroke="#525066" fill="none" stroke-width="2px"></line><polyline points="15 15 18 18 21 15" stroke="#525066" fill="none" stroke-width="2px"></polyline><line x1="18" y1="6" x2="18" y2="18" stroke="#525066" fill="none" stroke-width="2px"></line></svg></div>
+                  </th>
+                  <th class="w-[15%] align-middle h-[53px]">Type</th>
+                  <th class="w-[10%] align-middle h-[53px]">Version</th>
+                  <th class="w-[30%] align-middle h-[53px]">Last updated by</th>
+                </tr>
+              </thead>
               
-              <!-- Generating remaining 9 boilerplate rows for structural simulation -->
-              <script>
-                for(let i=2; i<=10; i++) {
-                  document.write(`
-                  <tr class="table-row h-[48px] hover:bg-[#fff8f5] border-b border-[#f2f2f8] transition-colors group">
-                    <td class="pl-2"><input type="checkbox" class="rounded"></td>
-                    <td class="font-medium flex items-center justify-between h-[48px]">
-                      <div class="flex items-center gap-2 cursor-pointer hover:underline" onclick="changeView('view-dvm')">
-                        <svg class="icon icon-tabler icon-tabler-directions" width="20" height="20" viewBox="0 0 24 24" stroke="#6B697B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M12 21v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 13v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 5v-2" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M10 21h4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M8 5v4h11l2 -2l-2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M14 13v4h-8l-2 -2l2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg>
-                        <span class="text-[#1f1f32] font-semibold">Test Flow \${i}</span>
-                      </div>
-                      <div class="row-actions opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-4">
-                        <button class="p-1"><svg class="icon icon-tabler icon-tabler-player-play" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M7 4v16l13 -8z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg></button>
-                        <button onclick="changeView('view-dvm')" class="p-1"><svg class="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" stroke="#6B697B" fill="none" stroke-width="2px"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" stroke="#6B697B" fill="none" stroke-width="2px"></line></svg></button>
-                        <button class="p-1"><svg class="icon icon-tabler icon-tabler-dots" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="5" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="12" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="19" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle></svg></button>
-                      </div>
-                    </td>
-                    <td class="text-[#6b697b]">Jun 07, 2026</td>
-                    <td><span class="bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded border border-orange-100 font-medium text-[11px]">Flow</span></td>
-                    <td class="text-[#6b697b] font-mono">1</td>
-                    <td class="text-[#6b697b]">Aravind Manohar</td>
-                  </tr>
-                  `);
-                }
-              </script>
-            </tbody>
-          </table>
+              <tbody class="text-[#3D3C52]">
+                <script>
+                  const rowNames = [
+                    "Onboarding Welcome Flow",
+                    "How to Create an Invoice",
+                    "New Feature Smart Tip",
+                    "Help Center Beacon",
+                    "Password Reset Walkthrough",
+                    "Dashboard Navigation Flow",
+                    "Profile Setup Guide",
+                    "Integration Settings Tooltip",
+                    "Export Data Task List",
+                    "Weekly Report Smart Tip"
+                  ];
+
+                  for(let i=0; i<rowNames.length; i++) {
+                    const borderClass = i === rowNames.length - 1 ? "" : "border-b border-[#f2f2f8]";
+                    document.write(`
+                    <tr class="table-row h-[48px] ${borderClass} group">
+                      <td class="pl-[16px] align-middle w-[44px]">
+                        <div class="flex items-center h-[48px]">
+                          <input type="checkbox" class="custom-checkbox">
+                        </div>
+                      </td>
+                      <td class="font-normal align-middle">
+                        <div class="flex items-center justify-between h-[48px]">
+                          <div class="flex items-center gap-2 cursor-pointer hover:underline" onclick="changeView('view-dvm')">
+                            <svg class="icon icon-tabler icon-tabler-directions" width="20" height="20" viewBox="0 0 24 24" stroke="#6B697B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M12 21v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 13v-4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M12 5v-2" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M10 21h4" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M8 5v4h11l2 -2l-2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path><path d="M14 13v4h-8l-2 -2l2 -2z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg>
+                            <span class="text-[#3D3C52] font-normal">${rowNames[i]}</span>
+                          </div>
+                          <div class="row-actions opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-4">
+                            <button class="p-1" title="Play"><svg class="icon icon-tabler icon-tabler-player-play" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M7 4v16l13 -8z" stroke="#6B697B" fill="none" stroke-width="2px"></path></svg></button>
+                            <button onclick="changeView('view-dvm')" class="p-1 text-[#d45f00] hover:bg-orange-100/50 rounded" title="Edit Content">
+                              <svg class="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" stroke="#6B697B" fill="none" stroke-width="2px"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" stroke="#6B697B" fill="none" stroke-width="2px"></line></svg>
+                            </button>
+                            <button class="p-1" title="More"><svg class="icon icon-tabler icon-tabler-dots" width="20" height="20" viewBox="0 0 24 24" stroke="#6b697b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><circle cx="5" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="12" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle><circle cx="19" cy="12" r="1" stroke="#6B697B" fill="none" stroke-width="2px"></circle></svg></button>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-[#6b697b] align-middle h-[48px] font-normal">Jun 08, 2026</td>
+                      <td class="align-middle h-[48px] font-normal"><span class="bg-orange-50 text-[#d45f00] px-2 py-0.5 rounded border border-orange-100 font-normal text-[11px]">Flow</span></td>
+                      <td class="text-[#6b697b] font-mono align-middle h-[48px] font-normal">1</td>
+                      <td class="text-[#6b697b] align-middle h-[48px] font-normal">Aravind Manohar</td>
+                    </tr>
+                    `);
+                  }
+                </script>
+              </tbody>
+            </table>
+          </div>
         </div>
         
-        <!-- FOOTER PAGINATION -->
-        <div class="dash-table-footer h-[56px] flex items-center justify-between px-[25px] text-[#6b697b] border-t border-[#e5e7eb] bg-white shrink-0">
-          <div>Rows 1-10 of 10</div>
-          <div class="pagination-container w-[112px] h-[36px] flex rounded-[4px] border border-[#d7d6d1] overflow-hidden bg-white">
-            <!-- PK Page left icon.svg -->
-            <button class="page-btn w-[36px] h-[36px] flex items-center justify-center border-r border-[#d7d6d1] text-[#d7d6d1] cursor-not-allowed">
-              <svg class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" color="currentColor" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M15 6l-6 6l6 6" stroke="#7B7891" fill="none" stroke-width="2px"></path></svg>
-            </button>
-            <button class="page-btn w-[40px] h-[36px] flex items-center justify-center font-medium text-[#1f1f32] bg-[#f2f2f8]">1</button>
-            <!-- PK Page right icon.svg -->
-            <button class="page-btn w-[36px] h-[36px] flex items-center justify-center border-l border-[#d7d6d1] text-[#d7d6d1] cursor-not-allowed">
-              <svg class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" color="currentColor" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M9 6l6 6l-6 6" stroke="#7B7891" fill="none" stroke-width="2px"></path></svg>
-            </button>
+        <div class="dash-table-footer h-[56px] flex items-center px-[25px] text-[#6b697b] border-t border-[#e5e7eb] bg-white shrink-0">
+          <div class="flex-1 text-left">
+            Rows 1-10 of 10
           </div>
+          <div class="flex-1 flex justify-center">
+            <div class="pagination-container w-[112px] h-[36px] flex rounded-[4px] border border-[#d7d6d1] overflow-hidden bg-white">
+              <button class="page-btn w-[36px] h-[36px] flex items-center justify-center border-r border-[#d7d6d1] text-[#d7d6d1] cursor-not-allowed">
+                <svg class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" color="currentColor" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M15 6l-6 6l6 6" stroke="#7B7891" fill="none" stroke-width="2px"></path></svg>
+              </button>
+              <button class="page-btn w-[40px] h-[36px] flex items-center justify-center font-medium text-[#1f1f32] bg-[#f2f2f8]">1</button>
+              <button class="page-btn w-[36px] h-[36px] flex items-center justify-center border-l border-[#d7d6d1] text-[#d7d6d1] cursor-not-allowed">
+                <svg class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" color="currentColor" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" stroke-width="2px"></path><path d="M9 6l6 6l-6 6" stroke="#7B7891" fill="none" stroke-width="2px"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div class="flex-1"></div>
         </div>
 
       </div>
